@@ -35,7 +35,7 @@ The purpose of this project is to get hands on.
 - [Installation guide](https://docs.docker.com/engine/install/ubuntu/)
 - Verify that the installation is successful:
   ```bash
-  sudo docker run hello-world
+  docker run hello-world
   ```
 
 **Nvidia Cuda**:
@@ -49,7 +49,14 @@ The purpose of this project is to get hands on.
 - [Installation guide](https://docs.nvidia.com/datacenter/cloud-native/container-toolkit/latest/install-guide.html)
 - Verify that the installation is successful: 
   ```bash
-  sudo docker run --rm --runtime=nvidia --gpus all ubuntu nvidia-smi
+  docker run --rm --runtime=nvidia --gpus all ubuntu nvidia-smi
+  ```
+
+**Ollama:**
+- Verify that you can run LLM:
+  ```bash
+  docker run -d --gpus=all -v ollama:/root/.ollama -p 11434:11434 --name ollama ollama/ollama
+  docker exec -it ollama ollama run gemma3
   ```
 
 **Minikube:**
