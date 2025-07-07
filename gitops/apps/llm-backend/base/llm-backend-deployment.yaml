@@ -3,23 +3,23 @@ kind: Deployment
 metadata:
   creationTimestamp: null
   labels:
-    app: backend
-  name: backend
+    app: llm-backend
+  name: llm-backend
   namespace: foobar
 spec:
   replicas: 1
   selector:
     matchLabels:
-      app: backend
+      app: llm-backend
   strategy: {}
   template:
     metadata:
       creationTimestamp: null
       labels:
-        app: backend
+        app: llm-backend
     spec:
       containers:
       - image: quay.io/redhatworkshops/welcome-php
-        name: backend
+        name: llm-backend
         resources: {}
 status: {}

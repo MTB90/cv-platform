@@ -31,14 +31,14 @@ Structure inspired by:
 └── apps
     ├── llm
     │   ├── base
-    │   │   ├── deployment.yaml
+    │   │   ├── llm-deployment.yaml
     │   │   └── kustomization.yaml
     │   └── overlays
     │       └── local
     │           └── kustomization.yaml
-    └── backend
+    └── llm-backend
         ├── base
-        │   ├── deployment.yaml
+        │   ├── llm-backend-deployment.yaml
         │   └── kustomization.yaml
         └── overlays
             └── local

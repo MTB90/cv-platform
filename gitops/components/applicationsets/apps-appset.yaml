@@ -1,7 +1,7 @@
 apiVersion: argoproj.io/v1alpha1
 kind: ApplicationSet
 metadata:
-  name: local-apps
+  name: minikube-appset
   namespace: argocd
 spec:
   generators:
@@ -9,7 +9,7 @@ spec:
       repoURL: https://github.com/MTB90/llm-minikube
       revision: main
       directories:
-      - path: gitops/apps/*/overlays/local
+      - path: gitops/apps/*/overlays/minikube
   template:
     metadata:
       name: '{{path.basename}}'
