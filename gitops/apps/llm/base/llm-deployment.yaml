@@ -1,0 +1,25 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  creationTimestamp: null
+  labels:
+    app: llm
+  name: llm
+  namespace: foobar
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: llm
+  strategy: {}
+  template:
+    metadata:
+      creationTimestamp: null
+      labels:
+        app: llm
+    spec:
+      containers:
+      - image: quay.io/redhatworkshops/welcome-php
+        name: llm
+        resources: {}
+status: {}

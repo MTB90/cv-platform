@@ -4,5 +4,3 @@ namespace: argocd
 
 bases:
 - ../../base
-- ../../../components/argocdproj
-- ../../../components/applicationsets
