@@ -1,7 +1,8 @@
 # GitOps
 
+## Code structure:
 
-Structure inspired by:
+Based on:
 - https://github.com/christianh814/example-kubernetes-go-repo/blob/main/README.md
 - https://github.com/gnunn-gitops/standards/blob/master/folders.md
 - https://codefresh.io/blog/how-to-structure-your-argo-cd-repositories-using-application-sets

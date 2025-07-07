@@ -64,6 +64,10 @@ The purpose of this project is to get hands on.
 - [NVIDIA GPUs with minikube](https://minikube.sigs.k8s.io/docs/tutorials/nvidia/#docker)
 - Verify that the installation is successful:
   ```bash
+  minikube start --gpus all --driver docker --container-runtime docker --cpus=8 --memory=16384
+  ```
+
+  ```bash
   cat << EOF | kubectl create -f -
   apiVersion: v1
   kind: Pod
@@ -80,3 +84,5 @@ The purpose of this project is to get hands on.
           nvidia.com/gpu: 1 # requesting 1 GPU
   EOF
   ```
+
+## Deployment:

@@ -14,5 +14,6 @@ minikube-delete:
 minikube-dashboard:
 	minikube dashboard --profile llm
 
-deploy:
+.PHONY:minikube-deploy
+minikube-deploy: minikube-start
 	kubectl apply -k https://github.com/MTB90/llm-minikube/gitops/bootstrap/overlays/default
