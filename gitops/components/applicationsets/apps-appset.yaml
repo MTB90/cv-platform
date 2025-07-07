@@ -1,9 +1,10 @@
 apiVersion: argoproj.io/v1alpha1
 kind: ApplicationSet
 metadata:
-  name: minikube-appset
+  name: llm-minikube-appset
   namespace: argocd
 spec:
+  goTemplate: true
   generators:
   - git:
       repoURL: https://github.com/MTB90/llm-minikube
@@ -12,10 +13,12 @@ spec:
       - path: gitops/apps/*/overlays/minikube
   template:
     metadata:
-      name: '{{path.basename}}'
+      name: '{{index .path.segments 2}}-{{index .path.segments 4}}'
     spec:
-      project: default
+      project: llm
       syncPolicy:
+        syncOptions:
+          - CreateNamespace=true
         automated:
           prune: true
           selfHeal: true
@@ -28,6 +31,7 @@ spec:
       source:
         repoURL: https://github.com/MTB90/llm-minikube
         targetRevision: main
-        path: '{{path}}'
+        path: '{{.path.path}}'
       destination:
         server: https://kubernetes.default.svc
+        namespace: 'llm'

@@ -5,7 +5,6 @@ metadata:
   labels:
     app: llm-backend
   name: llm-backend
-  namespace: foobar
 spec:
   replicas: 1
   selector:

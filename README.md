@@ -138,3 +138,4 @@ The purpose of this project is to get hands on.
 ```bash
   make argocd-deploy
 ```
+

@@ -14,6 +14,14 @@ minikube-delete:
 minikube-dashboard:
 	minikube dashboard --profile llm-minikube
 
-.PHONY:argocd-deploy
-argocd-deploy:
-	kubectl apply -k https://github.com/MTB90/llm-minikube/gitops/bootstrap/overlays/default
+.PHONY:argocd-crds:
+argocd-crds:
+	kubectl apply -k https://github.com/argoproj/argo-cd/manifests/crds\?ref\=stable
+
+.PHONY:argocd-apply
+argocd-apply: argocd-crds
+	kustomize build gitops/bootstrap/overlays/default | kubectl apply -f -
+
+.PHONY:argocd-delete
+argocd-delete:
+	kustomize build gitops/bootstrap/overlays/default | | kubectl delete -f -
