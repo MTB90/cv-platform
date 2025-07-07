@@ -63,11 +63,16 @@ The purpose of this project is to get hands on.
 - [Installation guide](https://minikube.sigs.k8s.io/docs/start/?arch=%2Flinux%2Fx86-64%2Fstable%2Fbinary+download)
 - [NVIDIA GPUs with minikube](https://minikube.sigs.k8s.io/docs/tutorials/nvidia/#docker)
 - Verify that the installation is successful:
+
   ```bash
-  minikube start --gpus all --driver docker --container-runtime docker --cpus=8 --memory=16384
+  # Start minikube cluster
+
+  minikube start --profile llm-minikube --gpus all --driver docker --container-runtime docker
   ```
 
   ```bash
+  # Deploy pod with CUDA
+
   cat << EOF | kubectl create -f -
   apiVersion: v1
   kind: Pod
@@ -85,4 +90,51 @@ The purpose of this project is to get hands on.
   EOF
   ```
 
+  ```bash
+  # Verify pod logs:
+
+  kubectl logs nvidia-smi
+  ```
+
+  ```bash
+  # Example output:
+
+  Mon Jul  7 20:36:12 2025
+  +-----------------------------------------------------------------------------------------+
+  | NVIDIA-SMI 575.57.08              Driver Version: 575.57.08      CUDA Version: 12.9     |
+  |-----------------------------------------+------------------------+----------------------+
+  | GPU  Name                 Persistence-M | Bus-Id          Disp.A | Volatile Uncorr. ECC |
+  | Fan  Temp   Perf          Pwr:Usage/Cap |           Memory-Usage | GPU-Util  Compute M. |
+  |                                         |                        |               MIG M. |
+  |=========================================+========================+======================|
+  |   0  NVIDIA GeForce RTX 3060 Ti     On  |   00000000:07:00.0  On |                  N/A |
+  | 92%   40C    P0             49W /  200W |     623MiB /   8192MiB |      7%      Default |
+  |                                         |                        |                  N/A |
+  +-----------------------------------------+------------------------+----------------------+
+
+  +-----------------------------------------------------------------------------------------+
+  | Processes:                                                                              |
+  |  GPU   GI   CI              PID   Type   Process name                        GPU Memory |
+  |        ID   ID                                                               Usage      |
+  |=========================================================================================|
+  |  No running processes found                                                             |
+  +-----------------------------------------------------------------------------------------+
+  ```
+
+  ```bash
+  # Delete minikube cluster:
+
+  minikube delete --profile llm-minikube
+  ```
+
 ## Deployment:
+
+1) Start llm-minikube cluster:
+```bash
+  make minikube-start
+```
+
+2) Deploy Apps using ArgoCD:
+```bash
+  make argocd-deploy
+```
