@@ -25,7 +25,7 @@ The purpose of this project is to get hands on.
 - Nvidia CUDA Version: 12.9 
 - Hardware: 
   - Free memory - 16GB 
-  - GPU - 4MG
+  - GPU - 8GB
 
 ---
 
@@ -134,8 +134,24 @@ The purpose of this project is to get hands on.
   make minikube-start
 ```
 
-2) Deploy Apps using ArgoCD:
+2) Deploy LLM Project using ArgoCD:
 ```bash
-  make argocd-deploy
+  # First, the ArgoCD CRDs will be installed. Then, the bootstrap process will be deployed, 
+  # which includes the installation of ArgoCD itself, followed by the creation of all necessary resources, 
+  # such as AppProject and ApplicationSet.
+  make llm-deploy
 ```
 
+3) Access ArgoCD:
+
+- First portforward ArgoCD server on port: 8080
+  ```bash
+    make argocd-port-forward
+  ```
+
+- Get initial password for admin user
+  ```bash
+    make argocd-init-password
+  ```
+
+- Login in http://localhost:8080 as admin user

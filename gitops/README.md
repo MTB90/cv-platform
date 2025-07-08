@@ -35,13 +35,13 @@ Based on:
     │   │   ├── llm-deployment.yaml
     │   │   └── kustomization.yaml
     │   └── overlays
-    │       └── local
+    │       └── minikube
     │           └── kustomization.yaml
     └── llm-backend
         ├── base
         │   ├── llm-backend-deployment.yaml
         │   └── kustomization.yaml
         └── overlays
-            └── local
+            └── minikube
                 └── kustomization.yaml
 ```

@@ -14,14 +14,22 @@ minikube-delete:
 minikube-dashboard:
 	minikube dashboard --profile llm-minikube
 
-.PHONY:argocd-crds:
+.PHONY:argocd-crds
 argocd-crds:
 	kubectl apply -k https://github.com/argoproj/argo-cd/manifests/crds\?ref\=stable
 
-.PHONY:argocd-apply
-argocd-apply: argocd-crds
+.PHONY:argocd-port-forward
+argocd-port-forward:
+	kubectl port-forward service/argocd-server 8080:http -n argocd
+
+.PHONY:argocd-init-password
+argocd-init-password:
+	kubectl get secrets argocd-initial-admin-secret -n argocd -o jsonpath='{.data.password}' | base64 --decode
+
+.PHONY:llm-apply
+llm-apply: argocd-crds
 	kustomize build gitops/bootstrap/overlays/default | kubectl apply -f -
 
-.PHONY:argocd-delete
-argocd-delete:
-	kustomize build gitops/bootstrap/overlays/default | | kubectl delete -f -
+.PHONY:llm-remove
+llm-remove:
+	kustomize build gitops/bootstrap/overlays/default | kubectl delete -f -
