@@ -1,4 +1,4 @@
-# llm-minikube
+# cv-platform
 
 ## Description
 The purpose of this project is to get hands on.
@@ -67,7 +67,7 @@ The purpose of this project is to get hands on.
   ```bash
   # Start minikube cluster
 
-  minikube start --profile llm-minikube --gpus all --driver docker --container-runtime docker
+  minikube start --profile cv-platform-minikube --gpus all --driver docker --container-runtime docker
   ```
 
   ```bash
@@ -124,22 +124,22 @@ The purpose of this project is to get hands on.
   ```bash
   # Delete minikube cluster:
 
-  minikube delete --profile llm-minikube
+  minikube delete --profile cv-platform-minikube
   ```
 
 ## Deployment:
 
-1) Start llm-minikube cluster:
+1) Start cv-platform-minikube cluster:
 ```bash
   make minikube-start
 ```
 
-2) Deploy LLM Project using ArgoCD:
+2) Deploy Project using ArgoCD:
 ```bash
   # First, the ArgoCD CRDs will be installed. Then, the bootstrap process will be deployed, 
   # which includes the installation of ArgoCD itself, followed by the creation of all necessary resources, 
   # such as AppProject and ApplicationSet.
-  make llm-deploy
+  make cv-platform-apply
 ```
 
 3) Access ArgoCD:

@@ -1,13 +1,13 @@
 apiVersion: argoproj.io/v1alpha1
 kind: ApplicationSet
 metadata:
-  name: llm-minikube-appset
+  name: cv-platform-minikube-appset
   namespace: argocd
 spec:
   goTemplate: true
   generators:
   - git:
-      repoURL: https://github.com/MTB90/llm-minikube
+      repoURL: https://github.com/MTB90/cv-platform
       revision: main
       directories:
       - path: gitops/apps/*/overlays/minikube
@@ -15,7 +15,7 @@ spec:
     metadata:
       name: '{{index .path.segments 2}}-{{index .path.segments 4}}'
     spec:
-      project: llm
+      project: cv-platform
       syncPolicy:
         syncOptions:
           - CreateNamespace=true
@@ -29,7 +29,7 @@ spec:
             factor: 2
             maxDuration: 5m
       source:
-        repoURL: https://github.com/MTB90/llm-minikube
+        repoURL: https://github.com/MTB90/cv-platform
         targetRevision: main
         path: '{{.path.path}}'
       destination:

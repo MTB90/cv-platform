@@ -1,18 +1,18 @@
 .PHONY:minikube-start
 minikube-start:
-	minikube start --profile llm-minikube --gpus all --driver docker --container-runtime docker --cpus=8 --memory=16384
+	minikube start --profile cv-platform-minikube --gpus all --driver docker --container-runtime docker --cpus=8 --memory=16384
 
 .PHONY:minikube-stop
 minikube-stop:
-	minikube stop --profile llm-minikube
+	minikube stop --profile cv-platform-minikube
 
 .PHONY:minikube-delete
 minikube-delete:
-	minikube delete --profile llm-minikube
+	minikube delete --profile cv-platform-minikube
 
 .PHONY:minikube-dashboard
 minikube-dashboard:
-	minikube dashboard --profile llm-minikube
+	minikube dashboard --profile cv-platform-minikube
 
 .PHONY:argocd-crds
 argocd-crds:
@@ -26,10 +26,10 @@ argocd-port-forward:
 argocd-init-password:
 	kubectl get secrets argocd-initial-admin-secret -n argocd -o jsonpath='{.data.password}' | base64 --decode
 
-.PHONY:llm-apply
-llm-apply: argocd-crds
+.PHONY:cv-platform-apply
+cv-platform-apply: argocd-crds
 	kustomize build gitops/bootstrap/overlays/default | kubectl apply -f -
 
-.PHONY:llm-remove
-llm-remove:
+.PHONY:cv-platform-remove
+cv-platform-remove:
 	kustomize build gitops/bootstrap/overlays/default | kubectl delete -f -
