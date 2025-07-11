@@ -1,160 +1,50 @@
-# cv-platform
+# 🧠 cv-platform
 
-## Description
-The purpose of this project is to get hands on.
-
-- **DevOps/GitOps:**
-  - Minikube: https://minikube.sigs.k8s.io/docs
-  - ArgoCD: https://argo-cd.readthedocs.io/en/stable
-
-
-- **Agent AI:**
-  - CrewAI: https://github.com/crewAIInc/crewAI
-
-
-- **Other:**
-  - ollama: https://github.com/ollama/ollama
+**cv-platform** is a hands-on project focused on exploring modern AI agent and DevOps/GitOps practices. It integrates cutting-edge tools for platform engineering, automation, and experimentation.
 
 ---
 
-## Minimal requirements:
-- Docker: 28.3.0
-- Kubectl: v1.33.2
-- Minikube: v1.36.0
-- Nvidia Version: 575.57.08
-- Nvidia CUDA Version: 12.9 
-- Hardware: 
-  - Free memory - 16GB 
-  - GPU - 8GB
+## 🚀 Project Goals
+
+- Learn and apply DevOps and GitOps methodologies  
+- Experiment with AI agents and LLM orchestration  
+
 
 ---
 
-## Installation:
+## 🛠️ Tech Stack Overview
 
-**Docker:** 
-- [Installation guide](https://docs.docker.com/engine/install/ubuntu/)
-- Verify that the installation is successful:
-  ```bash
-  docker run hello-world
-  ```
+### 🔧 DevOps / GitOps
 
-**Nvidia Cuda**:
-- [Installation guide](https://docs.nvidia.com/cuda/cuda-installation-guide-linux/)
-- Verify that the installation is successful: 
-  ```bash
-  nvidia-smi
-  ```
+- **Minikube** — Local Kubernetes cluster  
+  [https://minikube.sigs.k8s.io/docs](https://minikube.sigs.k8s.io/docs)
+- **ArgoCD** — Declarative GitOps continuous delivery  
+  [https://argo-cd.readthedocs.io/en/stable](https://argo-cd.readthedocs.io/en/stable)
 
-**Nvidia Container Toolkit:**
-- [Installation guide](https://docs.nvidia.com/datacenter/cloud-native/container-toolkit/latest/install-guide.html)
-- Verify that the installation is successful: 
-  ```bash
-  docker run --rm --runtime=nvidia --gpus all ubuntu nvidia-smi
-  ```
+### 🤖 AI Agents
 
-**Ollama:**
-- Verify that you can run LLM:
-  ```bash
-  docker run -d --gpus=all -v ollama:/root/.ollama -p 11434:11434 --name ollama ollama/ollama
-  docker exec -it ollama ollama run gemma3
-  ```
+- **CrewAI** — Framework for building multi-agent systems  
+  [https://github.com/crewAIInc/crewAI](https://github.com/crewAIInc/crewAI)
 
-**Minikube:**
-- [Installation guide](https://minikube.sigs.k8s.io/docs/start/?arch=%2Flinux%2Fx86-64%2Fstable%2Fbinary+download)
-- [NVIDIA GPUs with minikube](https://minikube.sigs.k8s.io/docs/tutorials/nvidia/#docker)
-- Verify that the installation is successful:
+### 🧩 Other Tools
 
-  ```bash
-  # Start minikube cluster
+- **Ollama** — Run large language models locally  
+  [https://github.com/ollama/ollama](https://github.com/ollama/ollama)
 
-  minikube start --profile cv-platform-minikube --gpus all --driver docker --container-runtime docker
-  ```
+---
 
-  ```bash
-  # Deploy pod with CUDA
+## 📚 Documentation
 
-  cat << EOF | kubectl create -f -
-  apiVersion: v1
-  kind: Pod
-  metadata:
-    name: nvidia-smi
-  spec:
-    restartPolicy: OnFailure
-    containers:
-    - name: nvidia-smi
-      image: nvidia/cuda:12.9.1-base-ubi9
-      command: ["/bin/bash", "-c", "nvidia-smi"]
-      resources:
-        limits:
-          nvidia.com/gpu: 1 # requesting 1 GPU
-  EOF
-  ```
+Navigate the documentation to understand the platform architecture, setup, and components:
 
-  ```bash
-  # Verify pod logs:
+- [📌 Project Overview](docs/project_overview.md)  
+- [📁 Project Structure](docs/project_structure.md)  
+- [🏗️ Architecture](docs/project_architecture.md)  
+- [🧱 Tech Stack](docs/project_stack.md)  
+- [💻 Development Setup](docs/development_setup.md)
 
-  kubectl logs nvidia-smi
-  ```
+---
 
-  ```bash
-  # Example output:
+## 📍 Status
 
-  Mon Jul  7 20:36:12 2025
-  +-----------------------------------------------------------------------------------------+
-  | NVIDIA-SMI 575.57.08              Driver Version: 575.57.08      CUDA Version: 12.9     |
-  |-----------------------------------------+------------------------+----------------------+
-  | GPU  Name                 Persistence-M | Bus-Id          Disp.A | Volatile Uncorr. ECC |
-  | Fan  Temp   Perf          Pwr:Usage/Cap |           Memory-Usage | GPU-Util  Compute M. |
-  |                                         |                        |               MIG M. |
-  |=========================================+========================+======================|
-  |   0  NVIDIA GeForce RTX 3060 Ti     On  |   00000000:07:00.0  On |                  N/A |
-  | 92%   40C    P0             49W /  200W |     623MiB /   8192MiB |      7%      Default |
-  |                                         |                        |                  N/A |
-  +-----------------------------------------+------------------------+----------------------+
-
-  +-----------------------------------------------------------------------------------------+
-  | Processes:                                                                              |
-  |  GPU   GI   CI              PID   Type   Process name                        GPU Memory |
-  |        ID   ID                                                               Usage      |
-  |=========================================================================================|
-  |  No running processes found                                                             |
-  +-----------------------------------------------------------------------------------------+
-  ```
-
-  ```bash
-  # Delete minikube cluster:
-
-  minikube delete --profile cv-platform-minikube
-  ```
-
-## Deployment:
-
-1) Start cv-platform-minikube cluster:
-```bash
-  make minikube-start
-```
-
-2) Deploy Project using ArgoCD:
-```bash
-  # First, the ArgoCD CRDs will be installed. Then, the bootstrap process will be deployed, 
-  # which includes the installation of ArgoCD itself, followed by the creation of all necessary resources, 
-  # such as AppProject and ApplicationSet.
-  make cv-platform-apply
-```
-
-3) Access ArgoCD:
-
-- First portforward ArgoCD server on port: 8080
-  ```bash
-    make argocd-port-forward
-  ```
-
-- Get initial password for admin user
-  ```bash
-    make argocd-init-password
-  ```
-
-- Login in http://localhost:8080 as admin user
-
-## Docs:
-- [Project structure](docs/project_structure.md)
+This project is a work in progress and intended for learning, prototyping, and experimentation.

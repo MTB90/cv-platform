@@ -13,7 +13,7 @@ spec:
       - path: gitops/apps/*/overlays/minikube
   template:
     metadata:
-      name: '{{index .path.segments 2}}-{{index .path.segments 4}}'
+      name: '{{index .path.segments 4}}-{{index .path.segments 2}}'
     spec:
       project: cv-platform
       syncPolicy:

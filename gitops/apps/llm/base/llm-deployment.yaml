@@ -18,7 +18,9 @@ spec:
         app: llm
     spec:
       containers:
-      - image: quay.io/redhatworkshops/welcome-php
+      - image: ollama/ollama
         name: llm
-        resources: {}
+        resources:
+          limits:
+            nvidia.com/gpu: 1 # requesting 1 GPU
 status: {}
