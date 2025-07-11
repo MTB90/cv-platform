@@ -155,3 +155,6 @@ The purpose of this project is to get hands on.
   ```
 
 - Login in http://localhost:8080 as admin user
+
+## Docs:
+- [Project structure](docs/project_structure.md)

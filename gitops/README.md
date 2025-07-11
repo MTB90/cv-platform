@@ -1,6 +1,6 @@
 # GitOps
 
-## Code structure:
+## Folder structure:
 
 Based on:
 - https://github.com/christianh814/example-kubernetes-go-repo/blob/main/README.md
@@ -9,7 +9,6 @@ Based on:
 
 
 ```
-├── Makefile
 ├── README.md
 ├── bootstrap
 │   ├── base
