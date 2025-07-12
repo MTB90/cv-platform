@@ -37,10 +37,11 @@
 
 Navigate the documentation to understand the platform architecture, setup, and components:
 
-- [📌 Project Overview](docs/project_overview.md)  
-- [📁 Project Structure](docs/project_structure.md)  
-- [🏗️ Architecture](docs/project_architecture.md)  
-- [🧱 Tech Stack](docs/project_stack.md)  
+- [📌 Project Overview](docs/project_overview.md)
+- [📁 Project Structure](docs/project_structure.md)
+- [🏗️ Architecture](docs/project_architecture.md)
+- [🧱 Tech Stack](docs/project_stack.md)
+- [🚀 TODO](docs/project_todo.md)  
 - [💻 Development Setup](docs/development_setup.md)
 
 ---
