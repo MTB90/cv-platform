@@ -20,6 +20,9 @@ spec:
       containers:
       - image: cv-platform-backend
         imagePullPolicy: IfNotPresent
+        ports:
+          - name: http
+            containerPort: 8000
         name: backend
         resources: {}
 status: {}
