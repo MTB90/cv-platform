@@ -1,0 +1,24 @@
+name: Main CI
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  platform-backend-test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+
+      - name: install-requirements
+        working-directory: platform/backend
+        run: |
+          make pip-install
+          make pip-install-test
+
+      - name: code-test
+        working-directory: platform/backend
+        run: make code-test

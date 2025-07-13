@@ -4,6 +4,7 @@ VENV:=.venv
 PIP:=$(VENV)/bin/pip
 PYTHON:=$(VENV)/bin/python3
 PYTEST:=$(VENV)/bin/pytest
+FLAKE:=$(VENV)/bin/flake8
 
 $(VENV):
 	$(SYSTEM_PYTHON) -m venv .venv
@@ -13,7 +14,7 @@ pip-install: $(VENV)
 	$(PIP) install --upgrade pip
 	$(PIP) install -r requirements.txt
 
-.PHONY: pip-install-dev
+.PHONY: pip-install-test
 pip-install-test: $(VENV)
 	$(PIP) install -r requirements-test.txt
 
@@ -23,6 +24,10 @@ test-unit:
 
 .PHONY: test-all
 test-all: test-unit
+
+.PHONY: code-test
+code-test:
+	$(FLAKE) app
 
 .PHONY: build-image
 build-image:
