@@ -10,12 +10,17 @@
 ---
 ## Quick Start:
 
-1) Start cv-platform-minikube cluster:
+1) Start minikube cluster:
 ```bash
   make minikube-start
 ```
 
-2) Deploy Project using ArgoCD:
+2) Build and push images to minikube cluster:
+```bash
+  make minikube-push-images
+```
+
+3) Deploy Project using ArgoCD:
 ```bash
   # First, the ArgoCD CRDs will be installed. Then, the bootstrap process will be deployed, 
   # which includes the installation of ArgoCD itself, followed by the creation of all necessary resources, 
@@ -23,7 +28,7 @@
   make cv-platform-apply
 ```
 
-3) Access ArgoCD:
+4) Access ArgoCD:
 
 - First portforward ArgoCD server on port: 8080
   ```bash

@@ -14,6 +14,11 @@ minikube-delete:
 minikube-dashboard:
 	minikube dashboard --profile cv-platform-minikube
 
+.PHONY:minikube-push-images
+minikube-push-images:
+	(cd platform/backend; make build-image)
+	minikube --profile cv-platform-minikube image load cv-platform-backend
+
 .PHONY:argocd-crds
 argocd-crds:
 	kubectl apply -k https://github.com/argoproj/argo-cd/manifests/crds\?ref\=stable

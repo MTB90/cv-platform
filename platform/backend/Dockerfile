@@ -1,7 +1,7 @@
 FROM python:3.12
 
 WORKDIR /src
-ENV PYTHONPATH /src
+ENV PYTHONPATH=/src
 
 # Copy only the requirements.txt first to leverage Docker cache more efficiently
 COPY requirements.txt /src/requirements.txt

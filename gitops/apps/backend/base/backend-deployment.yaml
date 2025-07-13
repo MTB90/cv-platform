@@ -18,7 +18,8 @@ spec:
         app: backend
     spec:
       containers:
-      - image: quay.io/redhatworkshops/welcome-php
+      - image: cv-platform-backend
+        imagePullPolicy: IfNotPresent
         name: backend
         resources: {}
 status: {}
