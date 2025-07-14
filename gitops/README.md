@@ -19,8 +19,9 @@ Based on:
 │           └── kustomization.yaml
 ├── components
 │   ├── applicationsets
-│   │   ├── apps-appset.yaml
 │   │   ├── core-appset.yaml
+│   │   ├── minikube-apps-appset.yaml
+│   │   ├── minikube-infra-appset.yaml
 │   │   └── kustomization.yaml
 │   └── argocdproj
 │       ├── kustomization.yaml
@@ -28,6 +29,13 @@ Based on:
 ├── core
 │   └── gitops-controller
 │       └── kustomization.yaml
+├── infra
+│   └── posgresql
+│       ├── base
+│       │   └── kustomization.yaml
+│       └── overlays
+│           └── minikube
+│               └── kustomization.yaml
 └── apps
     ├── llm
     │   ├── base
