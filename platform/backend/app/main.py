@@ -11,7 +11,11 @@ from database import DB
 @asynccontextmanager
 async def lifespan(app: FastAPI):
     # Start up logic
-    app.state.DB = DB(settings.CV_BACKEND_DATABASE_URL)
+    app.state.DB = DB(
+        settings.CV_BACKEND_DB_USER,
+        settings.CV_BACKEND_DB_PASS,
+        settings.CV_BACKEND_DB_HOST
+    )
     yield
     # Clean up logic
 

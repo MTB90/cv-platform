@@ -24,5 +24,11 @@ spec:
           - name: http
             containerPort: 8000
         name: backend
+        envFrom:
+        - configMapRef:
+           name: backend-cm
+        - secretRef:
+            name: backend-db
         resources: {}
+
 status: {}

@@ -4,9 +4,11 @@
 ### gitops:
 - [x] basi pipeline for testing in github actions
 - [x] create base template for ArgoCD
+- [x] add postgresql for backend
 - [ ] deploy traefik for routing
-- [ ] add postgresql for backend
 - [ ] create ingress for backend
+- [ ] encrypt secrets in git repo
+- [ ] figure out how best update image in minikube
 
 ---
 ### platform/backend:
