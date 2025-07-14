@@ -42,6 +42,10 @@ build-image:
 up-dep-services:
 	$(DOCKER) compose up
 
+.PHONY: down-services
+down-dep-services:
+	$(DOCKER) compose down
+
 .PHONY: serve
 serve:
 	source env.sh && $(PYTHON) app/api
