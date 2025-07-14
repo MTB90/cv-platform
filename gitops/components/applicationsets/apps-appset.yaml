@@ -32,6 +32,8 @@ spec:
         repoURL: https://github.com/MTB90/cv-platform
         targetRevision: main
         path: '{{.path.path}}'
+        kustomize:
+          namespace: 'cv-platform'
       destination:
         server: https://kubernetes.default.svc
         namespace: 'cv-platform'

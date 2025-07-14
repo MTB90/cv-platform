@@ -25,7 +25,10 @@ def build_app() -> FastAPI:
         allow_methods=["*"],
         allow_headers=["*"],
     )
+
+    # add here all routes
     application.include_router(health.router, prefix=settings.API_PRIVATE)
+
     return application
 
 
