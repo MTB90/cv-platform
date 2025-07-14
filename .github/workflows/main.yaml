@@ -22,3 +22,13 @@ jobs:
       - name: code-test
         working-directory: platform/backend
         run: make code-test
+
+  platform-backend-build:
+    needs: [platform-backend-test]
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: build-image
+        working-directory: platform/backend
+        run: make build-image

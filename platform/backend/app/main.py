@@ -1,17 +1,32 @@
+from contextlib import asynccontextmanager
+
 from fastapi import FastAPI
-from fastapi.routing import APIRoute
+from fastapi.middleware.cors import CORSMiddleware
 
-from api import private_api_router
+from api import health
 from core.config import settings
+from database import DB
 
 
-def custom_generate_unique_id(route: APIRoute) -> str:
-    return f"{route.tags[0]}-{route.name}"
+@asynccontextmanager
+async def lifespan(app: FastAPI):
+    # Start up logic
+    app.state.DB = DB(settings.CV_BACKEND_DATABASE_URL)
+    yield
+    # Clean up logic
 
 
-app = FastAPI(
-    title=settings.PROJECT_NAME,
-    generate_unique_id_function=custom_generate_unique_id,
-)
+def build_app() -> FastAPI:
+    application = FastAPI(title=settings.CV_BACKEND_PROJECT_NAME, lifespan=lifespan)
+    application.add_middleware(
+        CORSMiddleware,
+        allow_origins=["*"],
+        allow_credentials=True,
+        allow_methods=["*"],
+        allow_headers=["*"],
+    )
+    application.include_router(health.router, prefix=settings.API_PRIVATE)
+    return application
 
-app.include_router(private_api_router, prefix=settings.API_PRIVATE)
+
+app = build_app()

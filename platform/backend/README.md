@@ -1,8 +1,19 @@
 # Platform Backend
 
-Install dependencies
-
+Install dependencies:
 ```shell script
-    pip install -r requirements.txt
-    pip install -r requirements-test.txt
+    make pip-install
+    make pip-install-test
+```
+
+## Local development:
+
+Start dependencies services:
+```shell script
+    make up-services
+```
+
+Serve backend:
+```shell script
+    make serve
 ```

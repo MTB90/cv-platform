@@ -1,4 +1,4 @@
-# Development Environment Setup
+# Deployment Minikube Setup
 
 ## Prerequisites
 - Docker 28.3.0+

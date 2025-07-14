@@ -1,3 +1,5 @@
+SHELL := /bin/bash
+
 SYSTEM_PYTHON=python3.12
 VENV:=.venv
 
@@ -5,6 +7,9 @@ PIP:=$(VENV)/bin/pip
 PYTHON:=$(VENV)/bin/python3
 PYTEST:=$(VENV)/bin/pytest
 FLAKE:=$(VENV)/bin/flake8
+DOCKER:=docker
+
+export PYTHONPATH=./app
 
 $(VENV):
 	$(SYSTEM_PYTHON) -m venv .venv
@@ -31,4 +36,12 @@ code-test:
 
 .PHONY: build-image
 build-image:
-	docker build -t cv-platform-backend .
+	$(DOCKER) build -t cv-platform-backend .
+
+.PHONY: up-services
+up-dep-services:
+	$(DOCKER) compose up
+
+.PHONY: serve
+serve:
+	source env.sh && $(PYTHON) app/api
