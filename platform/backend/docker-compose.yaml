@@ -2,9 +2,9 @@ services:
   db:
     image: postgres:17
     environment:
-      POSTGRES_DB: backend-db
-      POSTGRES_USER: user
-      POSTGRES_PASSWORD: pass
+      POSTGRES_DB: platform
+      POSTGRES_USER: platform
+      POSTGRES_PASSWORD: password
     ports:
     - 54321:5432
 
@@ -12,9 +12,9 @@ services:
     build: .
     environment:
       CV_BACKEND_DB_HOST: db:5432
-      CV_BACKEND_DB_NAME: backend-db
-      CV_BACKEND_DB_USER: user
-      CV_BACKEND_DB_PASS: pass
+      CV_BACKEND_DB_NAME: platform
+      CV_BACKEND_DB_USER: platform
+      CV_BACKEND_DB_PASS: password
     command: bash -c 'while !</dev/tcp/db/5432; do sleep 1; done; alembic upgrade head'
     depends_on:
       - db

@@ -6,3 +6,13 @@ helmCharts:
     repo: https://charts.bitnami.com/bitnami
     version: 12.12.10
     releaseName: postgresql
+
+    valuesInline:
+      auth:
+        username: "platform"
+        database: "platform"
+        existingSecret: "postgresql"
+        secretKeys:
+          userPasswordKey: "password"
+          adminPasswordKey: "postgresPassword"
+          replicationPasswordKey: "replicationPassword"
