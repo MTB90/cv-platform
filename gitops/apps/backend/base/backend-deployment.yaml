@@ -17,13 +17,24 @@ spec:
       labels:
         app: backend
     spec:
+      initContainers:
+      - image: cv-platform-backend
+        imagePullPolicy: IfNotPresent
+        name: migration
+        command: ["alembic", "upgrade", "head"]
+        envFrom:
+        - configMapRef:
+           name: backend-cm
+        - secretRef:
+            name: backend-db
+        resources: {}
       containers:
       - image: cv-platform-backend
         imagePullPolicy: IfNotPresent
         ports:
           - name: http
             containerPort: 8000
-        name: backend
+        name: api
         envFrom:
         - configMapRef:
            name: backend-cm
