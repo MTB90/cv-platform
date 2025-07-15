@@ -1,8 +1,8 @@
 services:
-  db:
+  backend-db:
     image: postgres:17
     environment:
-      POSTGRES_DB: db
+      POSTGRES_DB: backend-db
       POSTGRES_USER: user
       POSTGRES_PASSWORD: pass
     ports:

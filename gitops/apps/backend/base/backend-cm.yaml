@@ -4,4 +4,4 @@ metadata:
   name: backend-cm
 data:
   CV_BACKEND_PROJECT_NAME: "cv-platform"
-  CV_BACKEND_DB_HOST: "postgresql:5432/db"
+  CV_BACKEND_DB_HOST: "postgresql:5432/backend-db"
