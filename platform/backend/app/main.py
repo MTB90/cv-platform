@@ -11,17 +11,13 @@ from database import DB
 @asynccontextmanager
 async def lifespan(app: FastAPI):
     # Start up logic
-    app.state.DB = DB(
-        settings.CV_BACKEND_DB_USER,
-        settings.CV_BACKEND_DB_PASS,
-        settings.CV_BACKEND_DB_HOST
-    )
+    app.state.DB = DB(settings)
     yield
     # Clean up logic
 
 
 def build_app() -> FastAPI:
-    application = FastAPI(title=settings.CV_BACKEND_PROJECT_NAME, lifespan=lifespan)
+    application = FastAPI(lifespan=lifespan)
     application.add_middleware(
         CORSMiddleware,
         allow_origins=["*"],

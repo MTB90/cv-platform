@@ -8,12 +8,14 @@ Install dependencies:
 
 ## Local development:
 
-Start dependencies services:
+Start dep services:
 ```shell script
-    make up-services
+  # it will start db 
+  # and run migration
+  make up-dep-services
 ```
 
 Serve backend:
 ```shell script
-    make serve
+  make serve
 ```

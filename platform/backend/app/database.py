@@ -3,8 +3,11 @@ from sqlalchemy.orm import sessionmaker
 
 
 class DB:
-    def __init__(self, user: str, password: str, host: str):
-        url = f"postgresql+asyncpg://${user}:${password}@${host}"
+    def __init__(self, settings):
+        url = (
+            f"postgresql+asyncpg://{settings.CV_BACKEND_DB_USER}:{settings.CV_BACKEND_DB_PASS}"
+            f"@{settings.CV_BACKEND_DB_HOST}/{settings.CV_BACKEND_DB_NAME}"
+        )
 
         self.engine: AsyncEngine = create_async_engine(url)
         self.async_session: sessionmaker[AsyncSession] = sessionmaker(

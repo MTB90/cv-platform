@@ -12,10 +12,11 @@ config = context.config
 
 # configure sqlalchemy url
 host = settings.CV_BACKEND_DB_HOST
+name = settings.CV_BACKEND_DB_NAME
 user = settings.CV_BACKEND_DB_USER
 password = settings.CV_BACKEND_DB_PASS
 
-sqlalchemy_url = f"postgresql+psycopg2://{user}:{password}@{host}"
+sqlalchemy_url = f"postgresql+psycopg2://{user}:{password}@{host}/{name}"
 config.set_main_option("sqlalchemy.url", sqlalchemy_url)
 
 # Interpret the config file for Python logging.

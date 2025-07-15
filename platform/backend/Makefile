@@ -49,3 +49,8 @@ down-dep-services:
 .PHONY: serve
 serve:
 	source env.sh && $(PYTHON) app/api
+
+
+.PHONY: migration
+migration:
+	(cd app; alembic upgrade head)

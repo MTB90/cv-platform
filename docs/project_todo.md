@@ -14,6 +14,7 @@
 ### platform/backend:
 - [x] base template for backend service (FastAPI)
 - [x] check multistage for building docker image
+- [ ] define base models and write simple migrations
 - [ ] define api for backend service
 - [ ] configure settings (cors, database)
 

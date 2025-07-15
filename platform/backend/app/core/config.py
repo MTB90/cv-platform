@@ -2,10 +2,9 @@ from pydantic_settings import BaseSettings
 
 
 class Settings(BaseSettings):
-    CV_BACKEND_PROJECT_NAME: str
-
     # Database connection
     CV_BACKEND_DB_HOST: str
+    CV_BACKEND_DB_NAME: str
     CV_BACKEND_DB_PASS: str
     CV_BACKEND_DB_USER: str
 
