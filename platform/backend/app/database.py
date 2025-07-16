@@ -1,5 +1,8 @@
-from sqlalchemy.ext.asyncio import create_async_engine, AsyncSession, AsyncEngine
+from sqlalchemy.ext.asyncio import AsyncSession, AsyncEngine
 from sqlalchemy.orm import sessionmaker
+
+from sqlmodel import create_engine
+from sqlmodel.ext.asyncio.session import AsyncSession
 
 
 class DB:
@@ -11,7 +14,8 @@ class DB:
 
         url = f"postgresql+asyncpg://{user}:{password}@{host}/{name}"
 
-        self.engine: AsyncEngine = create_async_engine(url)
+        self.engine = AsyncEngine(create_engine(url, echo=True, future=True))
+
         self.async_session: sessionmaker[AsyncSession] = sessionmaker(
             self.engine,
             class_=AsyncSession,

@@ -1,6 +1,7 @@
 # Platform Backend
 
-Install dependencies:
+
+**Install dependencies:**
 ```shell script
     make pip-install
     make pip-install-test
@@ -8,14 +9,34 @@ Install dependencies:
 
 ## Local development:
 
-Start dep services:
+**Start dep services:**
 ```shell script
   # it will start db 
   # and run migration
   make up-dep-services
 ```
 
-Serve backend:
+**Serve backend:**
 ```shell script
   make serve
+```
+
+
+## Migration (alembic):
+
+**Generate new:**
+
+```shell script
+  make up-dep-services
+```
+
+```shell
+  source env.sh; cd app; alembic revision --autogenerate -m "migration revision name"
+```
+
+**Run migration:**
+
+```shell
+  # run migration locally
+  source env.sh; cd app; alembic upgrade head
 ```
