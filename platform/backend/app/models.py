@@ -1,9 +1,42 @@
+from datetime import datetime
+from typing import Optional
+from uuid import UUID, uuid4
+
+from sqlmodel import Column, DateTime, func
 from sqlmodel import SQLModel, Field
 
 
 class UserBase(SQLModel):
+    name: str
+    email: str
+
+
+class UserCreate(UserBase):
     pass
 
 
 class User(UserBase, table=True):
-    id: int = Field(default=None, nullable=False, primary_key=True)
+    __tablename__ = 'users'
+
+    id: UUID = Field(default_factory=uuid4, nullable=False, primary_key=True)
+    created_at: datetime = Field(
+        sa_column=Column(DateTime(), server_default=func.now(), nullable=False)
+    )
+
+
+class DocBase(SQLModel):
+    name: str
+    type: str
+
+
+class Doc(SQLModel, table=True):
+    __tablename__ = 'docs'
+
+    id: Optional[UUID] = Field(default_factory=uuid4, primary_key=True)
+    user_id: UUID = Field(default=None, nullable=False, foreign_key="users.id")
+    created_at: datetime = Field(
+        sa_column=Column(DateTime(), server_default=func.now(), nullable=False)
+    )
+    updated_at: Optional[datetime] = Field(
+        sa_column=Column(DateTime(), server_default=func.now(), nullable=False)
+    )
