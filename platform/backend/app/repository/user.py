@@ -2,8 +2,8 @@ from typing import Optional, Sequence
 
 from sqlalchemy import select
 
-from models import User, UserCreate
 from repository.base import BaseRepository
+from schema.user import User, UserCreate
 
 
 class UserRepository(BaseRepository):
