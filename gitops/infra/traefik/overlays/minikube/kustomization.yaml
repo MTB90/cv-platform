@@ -1,0 +1,12 @@
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+
+secretGenerator:
+  - name: postgresql
+    literals:
+      - password=platformPassword123
+      - postgresPassword=platformPassword123
+      - replicationPassword=platformPassword123
+
+resources:
+  - ../../base
