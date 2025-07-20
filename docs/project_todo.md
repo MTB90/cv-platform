@@ -18,8 +18,10 @@
 - [x] define base models and write simple migrations
 - [x] define basic api for users and docs
 - [ ] upload file using pre-signed url
+- [ ] how limit uploaded file up to 20MB
 - [ ] notify about file is uploaded
 - [ ] configure settings (cors, database)
+- [ ] general limits per user, requests/jobs total capacity etc.
 
 ### platform/agentai:
 - [ ] restrict access for workers
