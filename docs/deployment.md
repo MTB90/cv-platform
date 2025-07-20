@@ -12,11 +12,13 @@
 
 1) Start minikube cluster:
 ```bash
+  cd ../
   make minikube-start
 ```
 
 2) Build and push images to minikube cluster:
 ```bash
+  cd ../
   make minikube-push-images
 ```
 
@@ -25,6 +27,7 @@
   # First, the ArgoCD CRDs will be installed. Then, the bootstrap process will be deployed, 
   # which includes the installation of ArgoCD itself, followed by the creation of all necessary resources, 
   # such as AppProject and ApplicationSet.
+  cd ../
   make cv-platform-apply
 ```
 
@@ -32,11 +35,13 @@
 
 - First portforward ArgoCD server on port: 8080
   ```bash
+    cd ../
     make argocd-port-forward
   ```
 
 - Get initial password for admin user
   ```bash
+    cd ../
     make argocd-init-password
   ```
 
