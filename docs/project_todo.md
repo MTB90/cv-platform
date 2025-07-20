@@ -16,7 +16,7 @@
 - [x] base template for backend service (FastAPI)
 - [x] check multistage for building docker image
 - [x] define base models and write simple migrations
-- [ ] define api for backend service
+- [x] define basic api for users and docs
 - [ ] upload file using pre-signed url
 - [ ] notify about file is uploaded
 - [ ] configure settings (cors, database)

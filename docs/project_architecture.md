@@ -88,14 +88,24 @@ interaction with other components is described. The architecture revolves around
 
 **Docs:**
 
-| Methods | Url                                      | Description           |
-|---------|------------------------------------------|-----------------------|
-| POST    | `/api/v1/users/{user_id}/docs`           | Upload user docs (CV) |
-| DELETE  | `/api/v1/users/{user_id}/docs/{docs_id}` | Delete user docs (CV) |
+| Methods | Url                                     | Description                                     |
+|---------|-----------------------------------------|-------------------------------------------------|
+| GET     | `/api/v1/users/{user_id}/docs`          | Get all docs for user, without presigned url    |
+| POST    | `/api/v1/users/{user_id}/docs`          | Create entry and return presigned url to upload |
+| GET     | `/api/v1/users/{user_id}/docs/{doc_id}` | Get user docs with presigned url to download    |
+| DELETE  | `/api/v1/users/{user_id}/docs/{doc_id}` | Delete user doc with specific id                |
+
+**Webhooks:**
+
+| Methods | Url                                         | Description                     |
+|---------|---------------------------------------------|---------------------------------|
+| POST    | `/api/private/webooks/docs/{doc_id}/upload` | Update status uploaded that doc |
+| POST    | `/api/private/webooks/jobs/{doc_id}/status` | Update status of job            |
 
 ** Jobs:**
 
-| Methods | Url                              | Description                 |
-|---------|----------------------------------|-----------------------------|
-| POST    | `/users/{user_id}/jobs`          | Start process user docs     |
-| GET     | `/users/{user_id}/jobs/{job_id}` | Check status of the process |
+| Methods | Url                                     | Description                 |
+|---------|-----------------------------------------|-----------------------------|
+| POST    | `/api/v1/users/{user_id}/jobs`          | Start process user docs     |
+| GET     | `/api/v1/users/{user_id}/jobs/{job_id}` | Check status of the process |
+| DELETE  | `/api/v1/users/{user_id}/jobs/{job_id}` | Cancel job                  |
