@@ -24,6 +24,9 @@ spec:
             - -c
           args:
             - minio server /data --console-address :9090
+          volumeMounts:
+            - mountPath: /data
+              name: minio-local-volume
           envFrom:
             - secretRef:
                 name: minio-secret
