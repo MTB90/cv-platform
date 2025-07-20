@@ -31,7 +31,18 @@
   make cv-platform-apply
 ```
 
-4) Access ArgoCD:
+4) Access MinIO:
+
+- First portforward MinIO on port: 9090
+  ```bash
+    cd ../
+    make minio-port-forward
+  ```
+
+- Login in http://localhost:9090
+  - Create **cv-platform** bucket
+
+5) Access ArgoCD:
 
 - First portforward ArgoCD server on port: 8080
   ```bash

@@ -5,7 +5,7 @@
 - [x] basi pipeline for testing in github actions
 - [x] create base template for ArgoCD
 - [x] add postgresql for backend
-- [ ] deploy simple MinIO to store documents
+- [x] deploy simple MinIO to store documents
 - [ ] deploy traefik for routing
 - [ ] create ingress for backend
 - [ ] encrypt secrets in git repo

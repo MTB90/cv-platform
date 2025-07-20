@@ -3,7 +3,7 @@ from contextlib import asynccontextmanager
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 
-from api import health, user
+import api
 
 from core.config import settings
 from database import DB
@@ -27,11 +27,7 @@ def build_app() -> FastAPI:
         allow_headers=["*"],
     )
 
-    # add here all private routes
-    application.include_router(health.router, prefix=settings.API_PRIVATE)
-
-    # add here all public routes
-    application.include_router(user.router, prefix=settings.API_V1)
+    application.include_router(api.router)
     return application
 
 

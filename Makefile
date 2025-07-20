@@ -27,6 +27,10 @@ argocd-crds:
 argocd-port-forward:
 	kubectl port-forward service/argocd-server 8080:http -n argocd
 
+.PHONY:minio-port-forward
+minio-port-forward:
+	kubectl port-forward service/minio 9090:web -n cv-platform
+
 .PHONY:argocd-init-password
 argocd-init-password:
 	kubectl get secrets argocd-initial-admin-secret -n argocd -o jsonpath='{.data.password}' | base64 --decode
