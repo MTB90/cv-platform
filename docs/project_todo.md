@@ -10,7 +10,7 @@
 - [ ] create ingress for backend
 - [ ] encrypt secrets in git repo
 - [ ] figure out how best update image in minikube
-
+- [ ] add litter for yaml
 ---
 ### platform/backend:
 - [x] base template for backend service (FastAPI)

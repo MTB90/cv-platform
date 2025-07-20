@@ -1,0 +1,35 @@
+kind: Deployment
+metadata:
+  labels:
+    app: minio
+  name: minio
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: backend
+  strategy: {}
+  template:
+    metadata:
+      creationTimestamp: null
+      labels:
+        app: backend
+    spec:
+      containers:
+        - name: minio
+          image: quay.io/minio/minio:latest
+          command:
+            - /bin/bash
+            - -c
+          args:
+            - minio server /data --console-address :9090
+          envFrom:
+            - secretRef:
+                name: minio-secrets
+          resources: {}
+
+      volumes:
+        - name: minio-local-volume
+          hostPath: # MinIO generally recommends using locally-attached volumes
+            path: /mnt/minio/data # Specify a path to a local drive or volume on the Kubernetes worker node
+            type: DirectoryOrCreate # The path to the last directory must exist

@@ -1,7 +1,6 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  creationTimestamp: null
   labels:
     app: llm
   name: llm
@@ -13,7 +12,6 @@ spec:
   strategy: {}
   template:
     metadata:
-      creationTimestamp: null
       labels:
         app: llm
     spec:
@@ -23,4 +21,3 @@ spec:
         resources:
           limits:
             nvidia.com/gpu: 1 # requesting 1 GPU
-status: {}
