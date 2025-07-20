@@ -5,6 +5,8 @@ secretGenerator:
 - name: backend-db
   literals:
   - CV_BACKEND_DB_PASS=platformPassword123
+  - CV_BACKEND_MINIO_ACCESS_KEY=minioAccessKey
+  - CV_BACKEND_MINIO_SECRET_KEY=minioSecretKey
 
 resources:
 - ../../base

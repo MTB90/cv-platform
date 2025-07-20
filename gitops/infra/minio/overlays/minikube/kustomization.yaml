@@ -4,8 +4,8 @@ kind: Kustomization
 secretGenerator:
   - name: minio-secret
     literals:
-      - MINIO_ROOT_USER=minioPlatform
-      - MINIO_ROOT_PASSWORD=minioPlatformPassword123
+      - MINIO_ROOT_USER=minioAccessKey
+      - MINIO_ROOT_PASSWORD=minioSecretKey
 
 resources:
   - ../../base

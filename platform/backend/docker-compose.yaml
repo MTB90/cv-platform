@@ -18,3 +18,13 @@ services:
     command: bash -c 'while !</dev/tcp/db/5432; do sleep 1; done; alembic upgrade head'
     depends_on:
       - db
+
+  minio:
+    image: quay.io/minio/minio:latest
+    ports:
+      - 9090:9090
+      - 9000:9000
+    command: [ "server", "--console-address", ":9090", "/data" ]
+    environment:
+      MINIO_ROOT_USER: minioAccessKey
+      MINIO_ROOT_PASSWORD: minioSecretKey
