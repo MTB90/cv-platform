@@ -8,13 +8,12 @@ spec:
   replicas: 1
   selector:
     matchLabels:
-      app: backend
+      app: minio
   strategy: {}
   template:
     metadata:
-      creationTimestamp: null
       labels:
-        app: backend
+        app: minio
     spec:
       containers:
         - name: minio
