@@ -1,7 +1,7 @@
 apiVersion: v1
 kind: Service
 metadata:
-  name: backend
+  name: backend-api
 spec:
   selector:
     app: backend
@@ -9,8 +9,8 @@ spec:
     - name: http
       protocol: TCP
       port: 80
-      targetPort: 8000
+      targetPort: api
     - name: https
       protocol: TCP
       port: 443
-      targetPort: 8000
+      targetPort: api

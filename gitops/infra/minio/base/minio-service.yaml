@@ -9,11 +9,11 @@ spec:
     - name: http
       protocol: TCP
       port: 80
-      targetPort: 9090
+      targetPort: web
     - name: https
       protocol: TCP
       port: 443
-      targetPort: 9090
+      targetPort: web
 
 ---
 apiVersion: v1
@@ -27,8 +27,8 @@ spec:
     - name: http
       protocol: TCP
       port: 80
-      targetPort: 9000
+      targetPort: api
     - name: https
       protocol: TCP
       port: 443
-      targetPort: 9000
+      targetPort: api

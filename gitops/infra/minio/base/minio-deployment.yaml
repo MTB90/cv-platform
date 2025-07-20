@@ -18,6 +18,11 @@ spec:
       containers:
         - name: minio
           image: quay.io/minio/minio:latest
+          ports:
+            - name: web
+              containerPort: 9090
+            - name: api
+              containerPort: 9000
           command:
             - /bin/bash
             - -c

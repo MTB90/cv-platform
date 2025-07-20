@@ -30,7 +30,7 @@ spec:
       - image: cv-platform-backend
         imagePullPolicy: IfNotPresent
         ports:
-          - name: http
+          - name: api
             containerPort: 8000
         name: api
         envFrom:
