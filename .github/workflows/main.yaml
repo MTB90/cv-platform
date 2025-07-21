@@ -23,6 +23,11 @@ jobs:
         working-directory: platform/backend
         run: make code-test
 
+      - name: unit-test
+        working-directory: platform/backend
+        run: make unit-test
+
+
   platform-backend-build:
     needs: [platform-backend-test]
     runs-on: ubuntu-latest

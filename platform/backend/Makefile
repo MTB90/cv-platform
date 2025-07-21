@@ -34,6 +34,10 @@ test-all: test-unit
 code-test:
 	$(FLAKE) app
 
+.PHONY: unit-test
+unit-test:
+	$(PYTEST) app --cov=./ --cov-report=html
+
 .PHONY: build-image
 build-image:
 	$(DOCKER) build -t cv-platform-backend .
