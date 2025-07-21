@@ -3,7 +3,7 @@ from typing import List
 from fastapi import APIRouter, Depends
 from fastapi import status
 
-from dependencies.repo import user_repository
+from deps import user_repository
 from repository.user import UserRepository
 from schema.user import UserCreate, User
 

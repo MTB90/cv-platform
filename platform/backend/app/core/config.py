@@ -8,6 +8,12 @@ class Settings(BaseSettings):
     CV_BACKEND_DB_PASS: str
     CV_BACKEND_DB_USER: str
 
+    CV_BACKEND_MINIO_PORT: int
+    CV_BACKEND_MINIO_ENDPOINT: str
+    CV_BACKEND_MINIO_ACCESS_KEY: str
+    CV_BACKEND_MINIO_SECRET_KEY: str
+    CV_BACKEND_MINIO_BUCKET_NAME: str
+
     # API
     API_V1: str = "/api/v1"
     API_PRIVATE: str = "/api/private"
