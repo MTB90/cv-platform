@@ -43,7 +43,7 @@ build-image:
 	$(DOCKER) build -t cv-platform-backend .
 
 .PHONY: up-services
-up-dep-services:
+up-dep-services: build-image
 	$(DOCKER) compose up
 
 .PHONY: down-services
@@ -53,7 +53,6 @@ down-dep-services:
 .PHONY: serve
 serve:
 	source env.sh && $(PYTHON) app/api
-
 
 .PHONY: migration
 migration:

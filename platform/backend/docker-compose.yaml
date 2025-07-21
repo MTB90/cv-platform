@@ -9,12 +9,17 @@ services:
     - 54321:5432
 
   migration:
-    build: .
+    image: cv-platform-backend:latest
     environment:
       CV_BACKEND_DB_HOST: db:5432
       CV_BACKEND_DB_NAME: platform
       CV_BACKEND_DB_USER: platform
       CV_BACKEND_DB_PASS: password
+      CV_BACKEND_MINIO_PORT: 9000
+      CV_BACKEND_MINIO_ENDPOINT: minio
+      CV_BACKEND_MINIO_ACCESS_KEY: minioAccessKey
+      CV_BACKEND_MINIO_SECRET_KEY: minioSecretKey
+      CV_BACKEND_MINIO_BUCKET_NAME: minio-platform-bucket
     command: bash -c 'while !</dev/tcp/db/5432; do sleep 1; done; alembic upgrade head'
     depends_on:
       - db
