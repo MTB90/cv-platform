@@ -1,6 +1,7 @@
 .PHONY:minikube-start
 minikube-start:
 	minikube start --profile cv-platform-minikube --gpus all --driver docker --container-runtime docker --cpus=8 --memory=16384
+	minikube --profile cv-platform-minikube addons enable metrics-server
 
 .PHONY:minikube-stop
 minikube-stop:
@@ -27,9 +28,13 @@ argocd-crds:
 argocd-port-forward:
 	kubectl port-forward service/argocd-server 8080:http -n argocd
 
-.PHONY:minio-port-forward
-minio-port-forward:
+.PHONY:minio-web-port-forward
+minio-web-port-forward:
 	kubectl port-forward service/minio 9090:web -n cv-platform
+
+.PHONY:minio-api-port-forward
+minio-api-port-forward:
+	kubectl port-forward service/minio 9000:api -n cv-platform
 
 .PHONY:argocd-init-password
 argocd-init-password:
@@ -42,3 +47,7 @@ cv-platform-apply: argocd-crds
 .PHONY:cv-platform-remove
 cv-platform-remove:
 	kustomize build gitops/bootstrap/overlays/default | kubectl delete -f -
+
+.PHONY:cv-platform-backend-port-forward
+cv-platform-backend-port-forward:
+	kubectl port-forward service/backend 8000:http -n cv-platform

@@ -1,7 +1,7 @@
 from fastapi import APIRouter
 
-from app.api.private import health
-from app.api.v1 import users, docs
+from api.private import health
+from api.v1 import users, docs
 from core.config import settings
 
 router = APIRouter()
