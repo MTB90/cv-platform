@@ -7,6 +7,11 @@ from models import User
 from schema.user import UserResponse
 
 
+@pytest.fixture
+def anyio_backend():
+    return "asyncio"
+
+
 @pytest.fixture()
 def mock_user():
     date_string = "2024-09-19 15:45:30"

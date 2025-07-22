@@ -9,7 +9,7 @@ secretGenerator:
   - CV_BACKEND_MINIO_SERVER_URL=http://localhost:9000
   - CV_BACKEND_MINIO_ACCESS_KEY=minioAccessKey
   - CV_BACKEND_MINIO_SECRET_KEY=minioSecretKey
-  - CV_BACKEND_MINIO_BUCKET_NAME=minio-platform-bucket
+  - CV_BACKEND_MINIO_BUCKET_NAME=minio-platform-docs
 
 resources:
 - ../../base

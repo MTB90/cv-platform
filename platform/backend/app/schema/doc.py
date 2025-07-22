@@ -1,18 +1,30 @@
+from enum import Enum
 from uuid import UUID
 
+from pydantic import HttpUrl
 from sqlmodel import SQLModel
+
+
+class DocType(Enum):
+    CV = "CV"
+
+
+class DocFormat(Enum):
+    PDF = "pdf"
+    TXT = "txt"
 
 
 class DocBase(SQLModel):
     name: str
-    type: str
+    type: DocType
+    format: DocFormat
 
 
 class CreateCV(DocBase):
-    type: str = "CV"
+    type: DocType = DocType.CV
 
 
-class CrateCVResponse(DocBase):
+class CreateCVResponse(DocBase):
     id: UUID
-    type: str = "CV"
-    presigned_url: str
+    type: DocType = DocType.CV
+    presigned_url: HttpUrl

@@ -2,3 +2,4 @@
 omit =
     # omit everything in /tests
     app/tests/*
+    app/migrations/*

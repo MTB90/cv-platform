@@ -16,7 +16,7 @@ async def test_given_no_existing_user_when_create_cv_then_raise_404(mock_user_re
 
     mock_user_repo.return_value.get_by_id.return_value = None
     mock_user_id = UUID("a32ec7b9-9d23-4b21-bfe4-3c3762116332")
-    mock_cv_data = CreateCV(name="MyCV")
+    mock_cv_data = CreateCV(name="MyCV", format="txt")
 
     service = DocService(db, storage)
     with pytest.raises(UserNotFound):
@@ -32,7 +32,8 @@ async def test_given_existing_user_when_create_cv_then_create_pre_signed_url(
     storage = AsyncMock()
 
     mock_user_repo.return_value.get_by_id.return_value = mock_user
-    mock_cv_data = CreateCV(name="MyCV")
+    mock_cv_data = CreateCV(name="MyCV", format="pdf")
 
     service = DocService(db, storage)
     await service.create_cv(mock_user.id, mock_cv_data)
+    storage.presigned_put_object.assert_called_once()

@@ -17,10 +17,10 @@ services:
       CV_BACKEND_DB_PASS: password
 
       CV_BACKEND_MINIO_ENDPOINT: minio:9000
-      CV_BACKEND_MINIO_SEVER_URL: http://localhost:9000
+      CV_BACKEND_MINIO_SERVER_URL: http://localhost:9000
       CV_BACKEND_MINIO_ACCESS_KEY: minioAccessKey
       CV_BACKEND_MINIO_SECRET_KEY: minioSecretKey
-      CV_BACKEND_MINIO_BUCKET_NAME: minio-platform-bucket
+      CV_BACKEND_MINIO_BUCKET_NAME: minio-platform-docs
     command: bash -c 'while !</dev/tcp/db/5432; do sleep 1; done; alembic upgrade head'
     depends_on:
       - db
