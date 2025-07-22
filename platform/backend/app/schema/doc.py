@@ -20,11 +20,12 @@ class DocBase(SQLModel):
     format: DocFormat
 
 
-class CreateCV(DocBase):
+class CVCreate(DocBase):
     type: DocType = DocType.CV
 
 
-class CreateCVResponse(DocBase):
+class CVResponse(DocBase):
     id: UUID
     type: DocType = DocType.CV
+    format: DocFormat
     presigned_url: HttpUrl
