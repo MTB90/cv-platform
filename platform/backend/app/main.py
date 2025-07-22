@@ -6,10 +6,9 @@ from starlette.requests import Request
 from starlette.responses import JSONResponse
 
 import api
-
 from core.config import settings
-from core.exceptions import PlatformBackendApiError
-from database import DB
+from core.exceptions import BaseApiError
+from utils.database import DB
 
 
 @asynccontextmanager
@@ -37,9 +36,11 @@ def build_app() -> FastAPI:
 app = build_app()
 
 
-@app.exception_handler(PlatformBackendApiError)
-async def unicorn_exception_handler(request: Request, exc: PlatformBackendApiError):
+@app.exception_handler(BaseApiError)
+async def exception_handler(request: Request, exc: BaseApiError):
+    # TODO: log error
+
     return JSONResponse(
         status_code=exc.status_code,
-        content={"message": exc.message},
+        content={"detail": exc.message},
     )

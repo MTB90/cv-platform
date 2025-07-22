@@ -1,19 +1,21 @@
 from typing import Optional, Sequence
+from uuid import UUID
 
 from sqlalchemy import select
 
+from models import User
 from repository.base import BaseRepository
-from schema.user import User, UserCreate
+from schema.user import UserCreate
 
 
 class UserRepository(BaseRepository):
     async def get_all(self) -> Sequence[User]:
-        result = await self.db_session.execute(select(User))
+        result = await self.db.execute(select(User))
         return result.scalars().all()
 
-    async def get_by_id(self, user_id: str) -> Optional[User]:
-        result = await self.db_session.execute(
-            select(User).where(User.user_id == user_id)
+    async def get_by_id(self, user_id: UUID) -> Optional[User]:
+        result = await self.db.execute(
+            select(User).where(User.id == user_id)
         )
         return result.scalar_one_or_none()
 
@@ -22,7 +24,7 @@ class UserRepository(BaseRepository):
             name=user_data.name,
             email=user_data.email,
         )
-        self.db_session.add(user)
-        await self.db_session.commit()
-        await self.db_session.refresh(user)
+        self.db.add(user)
+        await self.db.commit()
+        await self.db.refresh(user)
         return user

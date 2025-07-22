@@ -1,16 +1,17 @@
+from models import Doc, User
 from repository.base import BaseRepository
-from schema.doc import Doc, DocCreate
-from schema.user import User
+from schema.doc import DocBase
 
 
 class DocRepository(BaseRepository):
-    async def create(self, user: User, doc_data: DocCreate) -> Doc:
+    async def create(self, user: User, doc_data: DocBase) -> Doc:
         doc = Doc(
             name=doc_data.name,
             type=doc_data.type,
             user_id=user.id
         )
-        self.db_session.add(doc)
-        await self.db_session.commit()
-        await self.db_session.refresh(doc)
+
+        self.db.add(doc)
+        await self.db.commit()
+        await self.db.refresh(doc)
         return doc
