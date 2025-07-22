@@ -14,9 +14,7 @@ class UserRepository(BaseRepository):
         return result.scalars().all()
 
     async def get_by_id(self, user_id: UUID) -> Optional[User]:
-        result = await self.db.execute(
-            select(User).where(User.id == user_id)
-        )
+        result = await self.db.execute(select(User).where(User.id == user_id))
         return result.scalar_one_or_none()
 
     async def create(self, user_data: UserCreate) -> User:

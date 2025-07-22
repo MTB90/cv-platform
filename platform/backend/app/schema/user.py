@@ -1,5 +1,4 @@
 from datetime import datetime
-from typing import Optional
 from uuid import UUID
 
 from sqlmodel import SQLModel
@@ -15,5 +14,5 @@ class UserCreate(UserBase):
 
 
 class UserResponse(UserBase):
+    id: UUID
     created_at: datetime
-

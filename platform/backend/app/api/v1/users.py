@@ -17,7 +17,9 @@ async def list_users(service: UserService = Depends(get_user_service)):
 
 
 @router.post("/", response_model=UserResponse, status_code=status.HTTP_201_CREATED)
-async def create_user(data: UserCreate, service: UserService = Depends(get_user_service)):
+async def create_user(
+    data: UserCreate, service: UserService = Depends(get_user_service)
+):
     return await service.create_user(data)
 
 

@@ -10,7 +10,7 @@ from schema.user import UserBase
 
 
 class Doc(DocBase, table=True):
-    __tablename__ = 'docs'
+    __tablename__ = "docs"
 
     id: Optional[UUID] = Field(default_factory=uuid4, primary_key=True)
     user_id: UUID = Field(default=None, nullable=False, foreign_key="users.id")
@@ -24,7 +24,7 @@ class Doc(DocBase, table=True):
 
 
 class User(UserBase, table=True):
-    __tablename__ = 'users'
+    __tablename__ = "users"
 
     id: UUID = Field(default_factory=uuid4, nullable=False, primary_key=True)
     created_at: datetime = Field(

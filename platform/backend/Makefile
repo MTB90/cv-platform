@@ -7,6 +7,8 @@ PIP:=$(VENV)/bin/pip
 PYTHON:=$(VENV)/bin/python3
 PYTEST:=$(VENV)/bin/pytest
 FLAKE:=$(VENV)/bin/flake8
+BLACK:=$(VENV)/bin/black
+
 DOCKER:=docker
 
 export PYTHONPATH=./app
@@ -33,6 +35,7 @@ test-all: test-unit
 .PHONY: code-test
 code-test:
 	$(FLAKE) app
+	$(BLACK) --check app
 
 .PHONY: unit-test
 unit-test:

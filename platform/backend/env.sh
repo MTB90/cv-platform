@@ -3,8 +3,7 @@ export CV_BACKEND_DB_NAME=platform
 export CV_BACKEND_DB_USER=platform
 export CV_BACKEND_DB_PASS=password
 
-export CV_BACKEND_MINIO_PORT=9000
-export CV_BACKEND_MINIO_ENDPOINT=localhost
+export CV_BACKEND_MINIO_ENDPOINT=localhost:9000
 export CV_BACKEND_MINIO_ACCESS_KEY=minioAccessKey
 export CV_BACKEND_MINIO_SECRET_KEY=minioSecretKey
 export CV_BACKEND_MINIO_BUCKET_NAME=minio-platform-bucket
