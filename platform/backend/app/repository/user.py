@@ -22,7 +22,6 @@ class UserRepository(BaseRepository):
             name=user_data.name,
             email=user_data.email,
         )
-        self.db.add(user)
-        await self.db.commit()
+        await self.add_and_commit(user)
         await self.db.refresh(user)
         return user

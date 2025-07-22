@@ -1,4 +1,4 @@
-from typing import AsyncGenerator
+from typing import AsyncGenerator, Annotated
 
 from fastapi import Depends
 from sqlmodel.ext.asyncio.session import AsyncSession
@@ -27,3 +27,7 @@ async def get_doc_service(
     db: AsyncSession = Depends(get_db), storage: Storage = Depends(get_storage)
 ) -> DocService:
     return DocService(db, storage)
+
+
+UserServiceDep = Annotated[UserService, Depends(get_user_service)]
+DocServiceDep = Annotated[DocService, Depends(get_doc_service)]
