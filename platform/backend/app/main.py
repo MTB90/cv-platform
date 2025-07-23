@@ -43,25 +43,29 @@ def build_app() -> FastAPI:
 app = build_app()
 
 
+@app.get("/healthz")
+async def health():
+    return {"message": "ok"}
+
+
 @app.middleware("http")
 async def http_middleware(request: Request, call_next):
+    # Ignore specific endpoints
+    if request.url.path in ["/healthz"]:
+        return await call_next(request)
+
     request_id = request.headers.get("X-Request-ID") or str(uuid.uuid4())
 
     # Save to context var and request.state
     context_request_id.set(request_id)
     request.state.request_id = request_id
 
-    logger.info(
-        "Request received", extra={"method": request.method, "path": request.url.path}
-    )
-
-    # Endpoint call
+    logger.info("request", extra={"method": request.method, "path": request.url.path})
     response = await call_next(request)
+    logger.info("response", extra={"status_code": response.status_code})
 
     # Add to response headers
     response.headers["X-Request-ID"] = request_id
-
-    logger.info("Response sent", extra={"status_code": response.status_code})
     return response
 
 
