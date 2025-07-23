@@ -1,3 +1,5 @@
+import logging
+import uuid
 from contextlib import asynccontextmanager
 
 from fastapi import FastAPI
@@ -6,9 +8,14 @@ from starlette.requests import Request
 from starlette.responses import JSONResponse
 
 import api
+from core.context import context_request_id
 from core.config import settings
 from core.exceptions import BaseApiError
+from core.logging import setup_logging
 from utils.database import DB
+
+setup_logging(settings.LOG_LEVEL)
+logger = logging.getLogger(__name__)
 
 
 @asynccontextmanager
@@ -36,9 +43,31 @@ def build_app() -> FastAPI:
 app = build_app()
 
 
+@app.middleware("http")
+async def http_middleware(request: Request, call_next):
+    request_id = request.headers.get("X-Request-ID") or str(uuid.uuid4())
+
+    # Save to context var and request.state
+    context_request_id.set(request_id)
+    request.state.request_id = request_id
+
+    logger.info(
+        "Request received", extra={"method": request.method, "path": request.url.path}
+    )
+
+    # Endpoint call
+    response = await call_next(request)
+
+    # Add to response headers
+    response.headers["X-Request-ID"] = request_id
+
+    logger.info("Response sent", extra={"status_code": response.status_code})
+    return response
+
+
 @app.exception_handler(BaseApiError)
 async def exception_handler(request: Request, exc: BaseApiError):
-    # TODO: log error
+    logger.error(f"Exception: {exc}")
 
     return JSONResponse(
         status_code=exc.status_code,

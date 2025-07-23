@@ -2,6 +2,13 @@ from pydantic_settings import BaseSettings
 
 
 class Settings(BaseSettings):
+    # Base
+    LOG_LEVEL: str = "INFO"
+
+    # API
+    API_V1: str = "/api/v1"
+    API_PRIVATE: str = "/api/private"
+
     # Database connection
     CV_BACKEND_DB_HOST: str
     CV_BACKEND_DB_NAME: str
@@ -13,10 +20,6 @@ class Settings(BaseSettings):
     CV_BACKEND_MINIO_ACCESS_KEY: str
     CV_BACKEND_MINIO_SECRET_KEY: str
     CV_BACKEND_MINIO_BUCKET_NAME: str
-
-    # API
-    API_V1: str = "/api/v1"
-    API_PRIVATE: str = "/api/private"
 
 
 settings = Settings()  # type: ignore

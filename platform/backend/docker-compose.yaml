@@ -9,7 +9,8 @@ services:
     - 54321:5432
 
   migration:
-    image: cv-platform-backend:latest
+    build:
+      context: .
     environment:
       CV_BACKEND_DB_HOST: db:5432
       CV_BACKEND_DB_NAME: platform

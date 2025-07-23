@@ -14,7 +14,7 @@ class DB:
 
         url = f"postgresql+asyncpg://{user}:{password}@{host}/{name}"
 
-        self.engine = AsyncEngine(create_engine(url, echo=True, future=True))
+        self.engine = AsyncEngine(create_engine(url, future=True))
 
         self.async_session: sessionmaker[AsyncSession] = sessionmaker(
             self.engine, class_=AsyncSession, expire_on_commit=False
