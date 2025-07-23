@@ -19,7 +19,7 @@
 - [x] define basic api for users and docs
 - [x] upload file using pre-signed url
 - [x] added logging
-- [ ] add health check in backend pod
+- [x] add health check in backend pod
 - [ ] how limit uploaded file up to 20MB
 - [ ] notify about file is uploaded
 - [ ] configure settings (cors, database)

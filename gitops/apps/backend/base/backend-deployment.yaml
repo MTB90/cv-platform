@@ -31,10 +31,10 @@ spec:
         imagePullPolicy: IfNotPresent
         livenessProbe:
           httpGet:
-            path: /api/private/health
+            path: /api/private/health/
             port: 8000
-          initialDelaySeconds: 3
-          periodSeconds: 5
+          initialDelaySeconds: 5
+          periodSeconds: 3
         ports:
           - name: api
             containerPort: 8000
