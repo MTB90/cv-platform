@@ -29,6 +29,12 @@ spec:
       containers:
       - image: cv-platform-backend
         imagePullPolicy: IfNotPresent
+        livenessProbe:
+          httpGet:
+            path: /api/private/health
+            port: 8000
+          initialDelaySeconds: 3
+          periodSeconds: 5
         ports:
           - name: api
             containerPort: 8000
