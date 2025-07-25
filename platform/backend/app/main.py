@@ -71,7 +71,7 @@ async def http_middleware(request: Request, call_next):
 
 @app.exception_handler(BaseApiError)
 async def exception_handler(request: Request, exc: BaseApiError):
-    logger.error(f"Exception: {exc}")
+    logger.error(f"exception: {exc.message}", extra={"description": exc.description})
 
     return JSONResponse(
         status_code=exc.status_code,
