@@ -23,7 +23,7 @@ class DocBase(BaseModel):
     name: constr(max_length=255)
     type: DocType
     format: DocFormat
-    status: DocStatus
+    status: DocStatus = DocStatus.PENDING
 
 
 class DocUpdateStatus(BaseModel):

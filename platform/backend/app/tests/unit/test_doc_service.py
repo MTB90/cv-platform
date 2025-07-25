@@ -4,7 +4,7 @@ from uuid import UUID
 import pytest
 
 from core.exceptions import UserNotFound
-from schema.doc import CVCreate
+from schema.doc import CVCreate, DocStatus
 from services.doc_service import DocService
 
 

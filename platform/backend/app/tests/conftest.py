@@ -4,7 +4,7 @@ from uuid import UUID
 import pytest
 
 from models import User, Doc
-from schema.doc import DocFormat, DocType
+from schema.doc import DocFormat, DocType, DocStatus
 from schema.user import UserResponse
 
 
@@ -34,6 +34,7 @@ def mock_cv():
         name="CV",
         user_id=UUID("16229579-de59-44a6-9b51-dec60bd50680"),
         type=DocType.CV,
+        status=DocStatus.PENDING,
         format=DocFormat.PDF,
         created_at=datetime.strptime(date_string, "%Y-%m-%d %H:%M:%S"),
         updated_at=datetime.strptime(date_string, "%Y-%m-%d %H:%M:%S"),
