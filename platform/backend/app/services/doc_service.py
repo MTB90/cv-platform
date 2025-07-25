@@ -6,11 +6,11 @@ from core.exceptions import UserNotFound
 from repository.doc import DocRepository
 from repository.user import UserRepository
 from schema.doc import CVCreate, CVResponse
-from utils.storage import Storage
+from utils.storage import MinioClient
 
 
 class DocService:
-    def __init__(self, db: AsyncSession, storage: Storage):
+    def __init__(self, db: AsyncSession, storage: MinioClient):
         self._db = db
         self._storage = storage
         self._user_repo = UserRepository(db)
@@ -23,7 +23,7 @@ class DocService:
 
         doc = await self._doc_repo.create(user_id, doc_data)
 
-        object_name = f"{user_id}/{doc.id}.{doc.format.value}"
+        object_name = f"{user_id}/{doc.id}.{doc.format}"
         presigned_url = await self._storage.presigned_put_object(object_name)
 
         return CVResponse(**doc.__dict__, presigned_url=presigned_url)

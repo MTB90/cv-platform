@@ -3,7 +3,7 @@ from datetime import timedelta
 from miniopy_async import Minio
 
 
-class Storage:
+class MinioClient:
     def __init__(self, settings):
         self._bucket_name = settings.CV_BACKEND_MINIO_BUCKET_NAME
         self._client = Minio(
