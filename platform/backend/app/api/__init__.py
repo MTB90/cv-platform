@@ -1,9 +1,9 @@
 from fastapi import APIRouter
 
-
 from api.v1 import users, docs
-from core.config import settings
+from core.config import get_settings
 
+settings = get_settings()
 router = APIRouter()
 
 # Public APIs

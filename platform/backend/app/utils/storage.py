@@ -1,6 +1,11 @@
+import logging
 from datetime import timedelta
 
 from miniopy_async import Minio
+
+from core.exceptions import StorageServiceError
+
+logger = logging.getLogger(__name__)
 
 
 class MinioClient:
@@ -16,12 +21,22 @@ class MinioClient:
 
     async def presigned_get_object(self, object_name: str) -> str:
         expires: timedelta = timedelta(hours=1)
-        return await self._client.presigned_get_object(
-            bucket_name=self._bucket_name, object_name=object_name, expires=expires
-        )
+
+        try:
+            return await self._client.presigned_get_object(
+                bucket_name=self._bucket_name, object_name=object_name, expires=expires
+            )
+        except Exception as e:
+            logger.error("can't create presigned url for download", exc_info=e)
+            raise StorageServiceError()
 
     async def presigned_put_object(self, object_name: str) -> str:
         expires: timedelta = timedelta(days=7)
-        return await self._client.presigned_put_object(
-            bucket_name=self._bucket_name, object_name=object_name, expires=expires
-        )
+
+        try:
+            return await self._client.presigned_put_object(
+                bucket_name=self._bucket_name, object_name=object_name, expires=expires
+            )
+        except Exception as e:
+            logger.error("can't create presigned url for upload", exc_info=e)
+            raise StorageServiceError()

@@ -17,7 +17,7 @@ class BaseRepository(ABC):
             await self.db.commit()
         except DatabaseError as exc:
             logger.error(
-                f"database error",
+                "database error",
                 extra={
                     "type": type(exc).__name__,
                     "object": str(obj.__class__.__name__),
@@ -37,7 +37,7 @@ class BaseRepository(ABC):
             await self.db.flush()
         except DatabaseError as exc:
             logger.error(
-                f"database error",
+                "database error",
                 extra={
                     "type": type(exc).__name__,
                     "object": str(obj.__class__.__name__),

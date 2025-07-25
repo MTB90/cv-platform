@@ -22,4 +22,11 @@ class Settings(BaseSettings):
     CV_BACKEND_MINIO_BUCKET_NAME: str
 
 
-settings = Settings()  # type: ignore
+_settings = None
+
+
+def get_settings() -> Settings:
+    global _settings
+    if _settings is None:
+        _settings = Settings()  # type: ignore
+    return _settings

@@ -1,8 +1,11 @@
+from contextlib import contextmanager
 from datetime import datetime
+from unittest.mock import AsyncMock, patch
 from uuid import UUID
 
 import pytest
 
+from core.config import Settings
 from models import User, Doc
 from schema.doc import DocFormat, DocType, DocStatus
 from schema.user import UserResponse
@@ -11,6 +14,29 @@ from schema.user import UserResponse
 @pytest.fixture
 def anyio_backend():
     return "asyncio"
+
+
+@pytest.fixture()
+def mock_settings() -> Settings:
+    return Settings(
+        CV_BACKEND_DB_HOST="db:5432",
+        CV_BACKEND_DB_NAME="platform",
+        CV_BACKEND_DB_USER="platform",
+        CV_BACKEND_DB_PASS="password",
+        CV_BACKEND_MINIO_SERVER_URL="http://localhost:9000",
+        CV_BACKEND_MINIO_ENDPOINT="minio:9000",
+        CV_BACKEND_MINIO_ACCESS_KEY="minioAccessKey",
+        CV_BACKEND_MINIO_SECRET_KEY="minioSecretKey",
+        CV_BACKEND_MINIO_BUCKET_NAME="minio-platform-docs",
+    )
+
+
+@contextmanager
+def patch_async_cls(patch_path: str):
+    with patch(patch_path) as mock_cls:
+        mock_instance = AsyncMock()
+        mock_cls.return_value = mock_instance
+        yield mock_instance
 
 
 @pytest.fixture()

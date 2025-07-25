@@ -8,12 +8,13 @@ from starlette.requests import Request
 from starlette.responses import JSONResponse
 
 import api
+from core.config import get_settings
 from core.context import context_request_id
-from core.config import settings
-from core.exceptions import BaseApiError
+from core.exceptions import BaseError
 from core.logging import setup_logging
 from utils.database import DB
 
+settings = get_settings()
 setup_logging(settings.LOG_LEVEL)
 logger = logging.getLogger(__name__)
 
@@ -54,26 +55,45 @@ async def http_middleware(request: Request, call_next):
     if request.url.path in ["/healthz"]:
         return await call_next(request)
 
-    request_id = request.headers.get("X-Request-ID") or str(uuid.uuid4())
-
     # Save to context var and request.state
+    request_id = request.headers.get("X-Request-ID") or str(uuid.uuid4())
     context_request_id.set(request_id)
     request.state.request_id = request_id
 
     logger.info("request", extra={"method": request.method, "path": request.url.path})
     response = await call_next(request)
-    logger.info("response", extra={"status_code": response.status_code})
+
+    if response.status_code < 400:
+        logger.info("response", extra={"status_code": response.status_code})
+    else:
+        logger.error("response", extra={"status_code": response.status_code})
 
     # Add to response headers
     response.headers["X-Request-ID"] = request_id
     return response
 
 
-@app.exception_handler(BaseApiError)
-async def exception_handler(request: Request, exc: BaseApiError):
-    logger.error(f"exception: {exc.message}", extra={"description": exc.description})
+@app.exception_handler(BaseError)
+async def business_error_handler(request: Request, exc: BaseError):
+    logger.error(
+        f"exception: {exc.message}",
+        extra={"type": type(exc).__name__, "exc": str(exc)},
+    )
+    request_id = getattr(request.state, "request_id", None)
 
-    return JSONResponse(
+    response = JSONResponse(
         status_code=exc.status_code,
         content={"detail": exc.message},
     )
+
+    # Also add it to headers for consistency
+    if request_id:
+        response.headers["X-Request-ID"] = request_id
+
+    return response
+
+
+@app.exception_handler(Exception)
+async def unexpected_error_handler(request: Request, exc: Exception):
+    logger.error("Unexpected error", exc_info=True)
+    return JSONResponse(status_code=500, content={"detail": "Internal server error"})

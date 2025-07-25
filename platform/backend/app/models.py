@@ -5,7 +5,7 @@ from uuid import UUID, uuid4
 from sqlalchemy import Column, DateTime, func, String
 from sqlmodel import Field, SQLModel
 
-from schema.doc import DocType, DocFormat, DocStatus
+from schema.doc import DocStatus
 
 
 class Doc(SQLModel, table=True):

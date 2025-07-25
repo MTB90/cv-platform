@@ -4,10 +4,12 @@ from fastapi import Depends
 from sqlmodel.ext.asyncio.session import AsyncSession
 from starlette.requests import Request
 
-from core.config import settings
+from core.config import get_settings
 from services.doc_service import DocService
 from services.user_service import UserService
 from utils.storage import MinioClient
+
+settings = get_settings()
 
 # Minio client use connection pool internally, stateless, and safe to share
 # singleton pattern improves performance and avoid problems with closing aiohttp.ClientSession

@@ -1,26 +1,38 @@
-class BaseApiError(Exception):
-    status_code = 500
-    message = "Service is unavailable"
-    description = None
+class BaseError(Exception):
+    status_code = None
+    message = None
 
-    def __init__(self, description=None):
-        self.description = description
+    def __init__(self):
         super().__init__(self.message, self.status_code)
 
 
-class NotFoundError(BaseApiError):
-    status_code = 404
-    message = "Entity does not exist"
+class ServiceError(BaseError):
+    status_code = 500
+    message = "Internal server error"
 
 
-class BadRequestError(BaseApiError):
+class StorageServiceError(BaseError):
+    status_code = 503
+    message = "Storage service unavailable"
+
+
+class ValidationError(BaseError):
     status_code = 400
-    message = "Invalid request"
+    message = "Bad Request"
 
 
-class UserNotFound(NotFoundError):
-    message = "User does not exist"
+class UserIntegrityError(ValidationError):
+    message = "Invalid user data"
 
 
-class DocNotFound(NotFoundError):
-    message = "Doc does not exist"
+class NotFoundError(BaseError):
+    status_code = 404
+    message = "Resource not found"
+
+
+class UserNotFoundError(NotFoundError):
+    message = "User not found"
+
+
+class DocNotFoundError(NotFoundError):
+    message = "Doc not found"
