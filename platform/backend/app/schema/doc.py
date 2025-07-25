@@ -1,23 +1,33 @@
 from enum import Enum
 from uuid import UUID
 
-from pydantic import HttpUrl
-from sqlmodel import SQLModel
+from pydantic import HttpUrl, BaseModel, constr
 
 
-class DocType(Enum):
+class DocType(str, Enum):
     CV = "CV"
 
 
-class DocFormat(Enum):
+class DocFormat(str, Enum):
     PDF = "pdf"
     TXT = "txt"
 
 
-class DocBase(SQLModel):
-    name: str
+class DocStatus(str, Enum):
+    PENDING = "pending"
+    UPLOADED = "uploaded"
+    DELETED = "deleted"
+
+
+class DocBase(BaseModel):
+    name: constr(max_length=255)
     type: DocType
     format: DocFormat
+    status: DocStatus
+
+
+class DocUpdateStatus(BaseModel):
+    status: DocStatus
 
 
 class CVCreate(DocBase):
@@ -27,5 +37,4 @@ class CVCreate(DocBase):
 class CVResponse(DocBase):
     id: UUID
     type: DocType = DocType.CV
-    format: DocFormat
     presigned_url: HttpUrl

@@ -1,12 +1,12 @@
 from datetime import datetime
 from uuid import UUID
 
-from sqlmodel import SQLModel
+from pydantic import BaseModel, constr
 
 
-class UserBase(SQLModel):
-    name: str
-    email: str
+class UserBase(BaseModel):
+    name: constr(max_length=255)
+    email: constr(max_length=255)
 
 
 class UserCreate(UserBase):
