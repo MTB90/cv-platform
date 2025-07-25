@@ -30,8 +30,8 @@ class DocUpdateStatus(BaseModel):
     status: DocStatus
 
 
-class CVCreate(DocBase):
-    type: DocType = DocType.CV
+class DocCreate(DocBase):
+    pass
 
 
 class CVResponse(DocBase):
