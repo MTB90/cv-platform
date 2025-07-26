@@ -20,6 +20,7 @@
 - [x] upload file using pre-signed url
 - [x] added logging
 - [x] add health check in backend pod
+- [ ] add soft delete for docs
 - [ ] how limit uploaded file up to 20MB
 - [ ] notify about file is uploaded
 - [ ] configure settings (cors, database)

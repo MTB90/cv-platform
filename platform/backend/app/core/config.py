@@ -9,12 +9,13 @@ class Settings(BaseSettings):
     API_V1: str = "/api/v1"
     API_PRIVATE: str = "/api/private"
 
-    # Database connection
+    # Database
     CV_BACKEND_DB_HOST: str
     CV_BACKEND_DB_NAME: str
     CV_BACKEND_DB_PASS: str
     CV_BACKEND_DB_USER: str
 
+    # Mino
     CV_BACKEND_MINIO_ENDPOINT: str
     CV_BACKEND_MINIO_SERVER_URL: str
     CV_BACKEND_MINIO_ACCESS_KEY: str

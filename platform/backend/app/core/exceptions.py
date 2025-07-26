@@ -25,6 +25,10 @@ class UserIntegrityError(ValidationError):
     message = "Invalid user data"
 
 
+class DocIntegrityError(ValidationError):
+    message = "Invalid doc data"
+
+
 class NotFoundError(BaseError):
     status_code = 404
     message = "Resource not found"

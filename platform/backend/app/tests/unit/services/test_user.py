@@ -23,9 +23,7 @@ async def test_get_user_by_id_when_user_not_exist_then_raise_404():
 
 
 @pytest.mark.anyio
-async def test_create_user_when_email_not_exist_then_return_user(
-    mock_user, mock_user_response
-):
+async def test_create_user_when_email_not_exist_then_return_user(mock_user, mock_user_response):
     create_user = UserCreate(name=mock_user.name, email=mock_user.email)
 
     with patch_async_cls("services.user_service.UserRepository") as mock_user_repo:
@@ -52,9 +50,7 @@ async def test_get_user_when_user_exist_then_return_user(mock_user, mock_user_re
 async def test_create_user_when_email_already_exist_then_raise_bad_request(mock_user):
     db = AsyncMock()
     db.add = Mock()
-    db.commit.side_effect = IntegrityError(
-        orig=Exception(), statement=None, params=None
-    )
+    db.commit.side_effect = IntegrityError(orig=Exception(), statement=None, params=None)
 
     service = UserService(db)
     create_user = UserCreate(name=mock_user.name, email=mock_user.email)

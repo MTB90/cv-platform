@@ -4,15 +4,11 @@ from fastapi import APIRouter
 from fastapi import status
 
 from deps import DocServiceDep
-from schema.doc import DocCreate, CVResponse
+from schema.doc import DocUpdateStatus
 
-router = APIRouter(prefix="/webhooks", tags=["docs"])
+router = APIRouter(prefix="/webhooks", tags=["webhooks", "docs"])
 
 
-@router.patch(
-    "/docs/{docs_id}/status",
-    response_model=CVResponse,
-    status_code=status.HTTP_204_NO_CONTENT,
-)
-async def update_docs(user_id: UUID, data: DocCreate, service: DocServiceDep):
-    return await service.create_cv(user_id, data)
+@router.patch("/docs/{doc_id}/status", status_code=status.HTTP_204_NO_CONTENT)
+async def update_doc_status(doc_id: UUID, data: DocUpdateStatus, service: DocServiceDep):
+    return await service.update_status(doc_id, data)

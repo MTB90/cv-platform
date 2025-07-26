@@ -35,11 +35,11 @@ test-all: test-unit
 .PHONY: code-test
 code-test:
 	$(FLAKE) app
-	$(BLACK) --check app --exclude app/migrations
+	$(BLACK) --check app --line-length 100 --exclude app/migrations
 
 .PHONY: code-format
 code-format:
-	$(BLACK) app --exclude app/migrations
+	$(BLACK) app --line-length 100 --exclude app/migrations
 
 .PHONY: unit-test
 unit-test:

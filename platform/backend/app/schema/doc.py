@@ -16,7 +16,6 @@ class DocFormat(str, Enum):
 class DocStatus(str, Enum):
     PENDING = "pending"
     UPLOADED = "uploaded"
-    DELETED = "deleted"
 
 
 class DocBase(BaseModel):
@@ -26,15 +25,14 @@ class DocBase(BaseModel):
     status: DocStatus = DocStatus.PENDING
 
 
-class DocUpdateStatus(BaseModel):
-    status: DocStatus
-
-
 class DocCreate(DocBase):
     pass
 
 
-class CVResponse(DocBase):
+class DocResponse(DocBase):
     id: UUID
-    type: DocType = DocType.CV
     presigned_url: HttpUrl
+
+
+class DocUpdateStatus(BaseModel):
+    status: DocStatus

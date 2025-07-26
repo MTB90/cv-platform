@@ -75,15 +75,8 @@ async def http_middleware(request: Request, call_next):
 
 @app.exception_handler(BaseError)
 async def business_error_handler(request: Request, exc: BaseError):
-    logger.error(
-        f"error: {exc.message}",
-        extra={"type": type(exc).__name__, "exc": str(exc)},
-    )
-
-    response = JSONResponse(
-        status_code=exc.status_code,
-        content={"detail": exc.message},
-    )
+    logger.error(f"error: {exc.message}", extra={"type": type(exc).__name__, "exc": str(exc)})
+    response = JSONResponse(status_code=exc.status_code, content={"detail": exc.message})
 
     # Also add it to headers for consistency
     request_id = getattr(request.state, "request_id", None)
@@ -96,10 +89,7 @@ async def business_error_handler(request: Request, exc: BaseError):
 @app.exception_handler(Exception)
 async def unexpected_error_handler(request: Request, exc: Exception):
     logger.error("unexpected error", exc_info=True)
-
-    response = JSONResponse(
-        status_code=500, content={"detail": "Internal server error"}
-    )
+    response = JSONResponse(status_code=500, content={"detail": "Internal server error"})
 
     # Also add it to headers for consistency
     request_id = getattr(request.state, "request_id", None)

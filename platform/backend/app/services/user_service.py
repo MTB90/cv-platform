@@ -15,7 +15,7 @@ class UserService:
         self._user_repo = UserRepository(db)
 
     async def create_user(self, data: UserCreate) -> UserResponse:
-        logger.info("creating new user", extra={"user": data})
+        logger.info("creating new user", extra={"data": data})
         user = await self._user_repo.create(data)
         logger.info("user created", extra={"user": user})
         return UserResponse(**user.__dict__)
