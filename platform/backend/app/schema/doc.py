@@ -75,10 +75,10 @@ class DocEventStatus(BaseModel):
                 )
 
             key_split = key.split("/")
-            if len(key_split) != 2:
+            if len(key_split) != 3:
                 raise ValueError("can't find user_id and doc_id in Key")
 
-            data["user_id"] = key_split[0]
-            data["doc_id"] = key_split[1].split(".")[0]
+            data["user_id"] = key_split[1]
+            data["doc_id"] = key_split[2].split(".")[0]
 
         return data
