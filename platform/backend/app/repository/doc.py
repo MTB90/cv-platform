@@ -24,8 +24,7 @@ class DocRepository(BaseRepository):
         try:
             await self.add_and_commit(doc)
         except IntegrityError:
-            logger.error("doc creation failed", extra={"doc": doc.id})
-            raise ConflictError()
+            raise ConflictError("Doc Creation Failed")
 
         await self.db.refresh(doc)
         return doc

@@ -85,7 +85,7 @@ async def http_middleware(request: Request, call_next):
 
 @app.exception_handler(AppException)
 async def business_error_handler(request: Request, exc: AppException):
-    logger.error(f"error: {exc.status_code}", extra={"type": type(exc).__name__, "exc": str(exc)})
+    logger.error(exc.message.lower(), extra={"exc": str(exc)})
     response = JSONResponse(
         status_code=exc.status_code,
         content={"detail": [exc.detail]},

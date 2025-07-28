@@ -31,8 +31,11 @@ class UserRepository(BaseRepository):
         try:
             await self.add_and_commit(user)
         except IntegrityError:
-            logger.error("user creation failed", extra={"user": user_data.email})
-            raise ConflictError()
+            raise ConflictError(
+                message="User Creation Failed",
+                field="email",
+                expected="unique email",
+            )
 
         await self.db.refresh(user)
         return user

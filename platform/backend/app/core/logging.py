@@ -7,14 +7,12 @@ from core.context import context_request_id
 
 
 class SensitiveFilter(logging.Filter):
-    SENSITIVE_KEYS = {"password", "secret", "token", "authorization", "api_key"}
+    SENSITIVE_KEYS = {"password", "secret", "token", "authorization", "api_key", "email"}
 
     def filter(self, record):
-        if hasattr(record, "args") and isinstance(record.args, dict):
-            record.args = {
-                k: ("***" if k.lower() in self.SENSITIVE_KEYS else v)
-                for k, v in record.args.items()
-            }
+        for key in self.SENSITIVE_KEYS:
+            if hasattr(record, key):  # Check if the field exists on the record
+                setattr(record, key, "***")  # Redact it by setting it to "***"
         return True
 
 
