@@ -10,7 +10,7 @@ from starlette.responses import JSONResponse
 import api
 from core.config import get_settings
 from core.context import context_request_id
-from core.exceptions import BaseError
+from core.exceptions import AppException
 from core.logging import setup_logging
 from utils.database import DB
 
@@ -83,12 +83,12 @@ async def http_middleware(request: Request, call_next):
     return response
 
 
-@app.exception_handler(BaseError)
-async def business_error_handler(request: Request, exc: BaseError):
-    logger.error(f"error: {exc.message}", extra={"type": type(exc).__name__, "exc": str(exc)})
+@app.exception_handler(AppException)
+async def business_error_handler(request: Request, exc: AppException):
+    logger.error(f"error: {exc.status_code}", extra={"type": type(exc).__name__, "exc": str(exc)})
     response = JSONResponse(
         status_code=exc.status_code,
-        content={"detail": [{"type": type(exc).__name__, "msg": exc.message}]},
+        content={"detail": [exc.detail]},
     )
 
     # Also add it to headers for consistency
@@ -98,7 +98,7 @@ async def business_error_handler(request: Request, exc: BaseError):
 
 @app.exception_handler(Exception)
 async def unexpected_error_handler(request: Request, exc: Exception):
-    logger.error("unexpected error", exc_info=True)
+    logger.error(f"unexpected error", extra={"type": type(exc).__name__, "exc": str(exc)})
     response = JSONResponse(
         status_code=500,
         content={"detail": [{"type": type(exc).__name__, "msg": "Internal server error"}]},

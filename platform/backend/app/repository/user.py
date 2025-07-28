@@ -5,7 +5,7 @@ from uuid import UUID
 from sqlalchemy import select
 from sqlalchemy.exc import IntegrityError
 
-from core.exceptions import UserIntegrityError
+from core.exceptions import ConflictError
 from models import User
 from repository.base import BaseRepository
 from schema.user import UserCreate
@@ -32,7 +32,7 @@ class UserRepository(BaseRepository):
             await self.add_and_commit(user)
         except IntegrityError:
             logger.error("user creation failed", extra={"user": user_data.email})
-            raise UserIntegrityError()
+            raise ConflictError()
 
         await self.db.refresh(user)
         return user

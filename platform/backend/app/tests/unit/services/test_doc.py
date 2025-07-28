@@ -3,7 +3,7 @@ from uuid import UUID
 
 import pytest
 
-from core.exceptions import UserNotFoundError, StorageServiceError, DocNotFoundError
+from core.exceptions import ServiceUnavailableError, NotFoundError
 from schema.doc import DocCreate, DocFormat, DocType, DocEventStatus
 from services.doc_service import DocService
 from tests.conftest import patch_async_cls
@@ -19,7 +19,7 @@ async def test_create_when_no_user_then_raise_404():
         mock_user_repo.get_by_id.return_value = None
 
         service = DocService(AsyncMock(), AsyncMock())
-        with pytest.raises(UserNotFoundError):
+        with pytest.raises(NotFoundError):
             await service.create(mock_user_id, doc_create)
 
 
@@ -52,7 +52,7 @@ async def test_create_when_storage_client_error_then_raise_storage_error(
 
     with patch_async_cls("services.doc_service.UserRepository") as mock_user_repo:
         with patch_async_cls("services.doc_service.DocRepository") as mock_doc_repo:
-            with pytest.raises(StorageServiceError):
+            with pytest.raises(ServiceUnavailableError):
                 service = DocService(AsyncMock(), MinioClient(mock_settings))
                 await service.create(mock_user.id, doc_create)
 
@@ -69,6 +69,6 @@ async def test_update_status_when_doc_not_exist_then_raise_404(mock_user, mock_c
         with patch_async_cls("services.doc_service.DocRepository") as mock_doc_repo:
             mock_doc_repo.get_by_id.return_value = None
 
-            with pytest.raises(DocNotFoundError):
+            with pytest.raises(NotFoundError):
                 service = DocService(AsyncMock(), AsyncMock())
                 await service.update_status(doc_update_status)

@@ -4,7 +4,7 @@ from uuid import UUID
 import pytest
 from sqlalchemy.exc import IntegrityError
 
-from core.exceptions import UserNotFoundError, ValidationError
+from core.exceptions import NotFoundError, ConflictError
 from schema.user import UserCreate
 from services.user_service import UserService
 from tests.conftest import patch_async_cls
@@ -18,7 +18,7 @@ async def test_get_user_by_id_when_user_not_exist_then_raise_404():
         mock_user_repo.get_by_id.return_value = None
         service = UserService(db)
 
-        with pytest.raises(UserNotFoundError):
+        with pytest.raises(NotFoundError):
             await service.get_user_by_id(UUID("2a7156db-0bae-4bc5-9bd5-f7f6d977fe34"))
 
 
@@ -55,5 +55,5 @@ async def test_create_user_when_email_already_exist_then_raise_bad_request(mock_
     service = UserService(db)
     create_user = UserCreate(name=mock_user.name, email=mock_user.email)
 
-    with pytest.raises(ValidationError):
+    with pytest.raises(ConflictError):
         await service.create_user(create_user)

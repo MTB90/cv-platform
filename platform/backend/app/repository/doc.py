@@ -5,7 +5,7 @@ from uuid import UUID
 from sqlalchemy import select
 from sqlalchemy.exc import IntegrityError
 
-from core.exceptions import DocIntegrityError
+from core.exceptions import ConflictError
 from models import Doc
 from repository.base import BaseRepository
 from schema.doc import DocBase
@@ -25,7 +25,7 @@ class DocRepository(BaseRepository):
             await self.add_and_commit(doc)
         except IntegrityError:
             logger.error("doc creation failed", extra={"doc": doc.id})
-            raise DocIntegrityError()
+            raise ConflictError()
 
         await self.db.refresh(doc)
         return doc

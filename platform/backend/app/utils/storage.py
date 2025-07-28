@@ -3,7 +3,7 @@ from datetime import timedelta
 
 from miniopy_async import Minio
 
-from core.exceptions import StorageServiceError
+from core.exceptions import ServiceUnavailableError
 
 logger = logging.getLogger(__name__)
 
@@ -28,7 +28,7 @@ class MinioClient:
             )
         except Exception as e:
             logger.error("can't create presigned url for download", exc_info=e)
-            raise StorageServiceError()
+            raise ServiceUnavailableError("storage service error")
 
     async def presigned_put_object(self, object_name: str) -> str:
         expires: timedelta = timedelta(days=7)
@@ -39,4 +39,4 @@ class MinioClient:
             )
         except Exception as e:
             logger.error("can't create presigned url for upload", exc_info=e)
-            raise StorageServiceError()
+            raise ServiceUnavailableError()

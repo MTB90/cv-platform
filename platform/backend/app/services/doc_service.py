@@ -3,7 +3,7 @@ from uuid import UUID, uuid4
 
 from sqlmodel.ext.asyncio.session import AsyncSession
 
-from core.exceptions import UserNotFoundError, DocNotFoundError
+from core.exceptions import NotFoundError
 from repository.doc import DocRepository
 from repository.user import UserRepository
 from schema.doc import DocCreate, DocEventStatus, DocResponse
@@ -24,7 +24,7 @@ class DocService:
 
         user = await self._user_repo.get_by_id(user_id)
         if user is None:
-            raise UserNotFoundError()
+            raise NotFoundError()
 
         doc_id = uuid4()
         object_name = f"{user_id}/{doc_id}.{data.format}"
@@ -42,11 +42,11 @@ class DocService:
 
         user = await self._user_repo.get_by_id(data.user_id)
         if user is None:
-            raise UserNotFoundError()
+            raise NotFoundError()
 
         doc = await self._doc_repo.get_by_id(data.doc_id)
         if doc is None:
-            raise DocNotFoundError()
+            raise NotFoundError()
 
         doc.status = data.status
         await self._doc_repo.add_and_commit(doc)

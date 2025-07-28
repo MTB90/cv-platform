@@ -3,7 +3,7 @@ from uuid import UUID
 
 from sqlmodel.ext.asyncio.session import AsyncSession
 
-from core.exceptions import UserNotFoundError
+from core.exceptions import NotFoundError
 from repository.user import UserRepository
 from schema.user import UserCreate, UserResponse
 
@@ -30,6 +30,6 @@ class UserService:
 
         user = await self._user_repo.get_by_id(user_id)
         if user is None:
-            raise UserNotFoundError()
+            raise NotFoundError()
 
         return UserResponse(**user.__dict__)
