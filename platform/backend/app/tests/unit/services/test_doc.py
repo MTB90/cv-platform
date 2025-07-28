@@ -4,7 +4,7 @@ from uuid import UUID
 import pytest
 
 from core.exceptions import UserNotFoundError, StorageServiceError, DocNotFoundError
-from schema.doc import DocCreate, DocFormat, DocType, DocStatus, DocEventStatus
+from schema.doc import DocCreate, DocFormat, DocType, DocEventStatus
 from services.doc_service import DocService
 from tests.conftest import patch_async_cls
 from utils.storage import MinioClient
