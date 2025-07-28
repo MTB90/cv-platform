@@ -8,6 +8,7 @@ PYTHON:=$(VENV)/bin/python3
 PYTEST:=$(VENV)/bin/pytest
 FLAKE:=$(VENV)/bin/flake8
 BLACK:=$(VENV)/bin/black
+MINIO:=mc
 
 DOCKER:=docker
 
@@ -51,7 +52,14 @@ build-image:
 
 .PHONY: up-services
 up-dep-services: build-image
-	$(DOCKER) compose up
+	$(DOCKER) compose up &
+
+.PHONY: setup-minio
+setup-minio:
+	$(MINIO) alias set local http://127.0.0.1:9000 minioAccessKey minioSecretKey
+	@$(MINIO) mb local/minio-platform-docs || echo "Bucket already exist"
+	@$(MINIO) event add local/minio-platform-docs arn:minio:sqs::DOC_STATUS:webhook --event put || echo "Webhook already exist"
+
 
 .PHONY: down-services
 down-dep-services:

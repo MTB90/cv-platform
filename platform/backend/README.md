@@ -16,6 +16,13 @@
   make up-dep-services
 ```
 
+**Setup minio:** 
+```shell script
+  # create bucket if not exist 
+  # add events for bucket
+  make setup-minio
+```
+
 **Serve backend:**
 ```shell script
   make serve

@@ -6,7 +6,7 @@ from sqlmodel.ext.asyncio.session import AsyncSession
 from core.exceptions import UserNotFoundError, DocNotFoundError
 from repository.doc import DocRepository
 from repository.user import UserRepository
-from schema.doc import DocCreate, DocUpdateStatus, DocResponse
+from schema.doc import DocCreate, DocEventStatus, DocResponse
 from utils.storage import MinioClient
 
 logger = logging.getLogger(__name__)
@@ -36,14 +36,17 @@ class DocService:
 
         return DocResponse(**doc.__dict__, presigned_url=presigned_url)
 
-    async def update_status(self, doc_id: UUID, data: DocUpdateStatus):
-        logger.info("updating doc status", extra={"id": doc_id, "data": data})
+    async def update_status(self, data: DocEventStatus):
+        logger.info("updating doc status", extra={"data": data})
 
-        doc = await self._doc_repo.get_by_id(doc_id)
+        user = await self._user_repo.get_by_id(data.user_id)
+        if user is None:
+            raise UserNotFoundError()
+
+        doc = await self._doc_repo.get_by_id(data.doc_id)
         if doc is None:
             raise DocNotFoundError()
 
         doc.status = data.status
         await self._doc_repo.add_and_commit(doc)
-
         logger.info("doc updated", extra={"doc": doc})

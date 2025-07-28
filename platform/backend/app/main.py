@@ -60,7 +60,17 @@ async def http_middleware(request: Request, call_next):
     context_request_id.set(request_id)
     request.state.request_id = request_id
 
-    logger.info("request", extra={"method": request.method, "path": request.url.path})
+    logger.info(
+        "request",
+        extra={
+            "client": request.client,
+            "method": request.method,
+            "path": request.url.path,
+            "path_params": request.path_params,
+            "query_params": request.query_params,
+        },
+    )
+
     response = await call_next(request)
 
     if response.status_code < 400:
@@ -76,24 +86,24 @@ async def http_middleware(request: Request, call_next):
 @app.exception_handler(BaseError)
 async def business_error_handler(request: Request, exc: BaseError):
     logger.error(f"error: {exc.message}", extra={"type": type(exc).__name__, "exc": str(exc)})
-    response = JSONResponse(status_code=exc.status_code, content={"detail": exc.message})
+    response = JSONResponse(
+        status_code=exc.status_code,
+        content={"detail": [{"type": type(exc).__name__, "msg": exc.message}]},
+    )
 
     # Also add it to headers for consistency
-    request_id = getattr(request.state, "request_id", None)
-    if request_id:
-        response.headers["X-Request-ID"] = request_id
-
+    response.headers["X-Request-ID"] = getattr(request.state, "request_id", None)
     return response
 
 
 @app.exception_handler(Exception)
 async def unexpected_error_handler(request: Request, exc: Exception):
     logger.error("unexpected error", exc_info=True)
-    response = JSONResponse(status_code=500, content={"detail": "Internal server error"})
+    response = JSONResponse(
+        status_code=500,
+        content={"detail": [{"type": type(exc).__name__, "msg": "Internal server error"}]},
+    )
 
     # Also add it to headers for consistency
-    request_id = getattr(request.state, "request_id", None)
-    if request_id:
-        response.headers["X-Request-ID"] = request_id
-
+    response.headers["X-Request-ID"] = getattr(request.state, "request_id", None)
     return response

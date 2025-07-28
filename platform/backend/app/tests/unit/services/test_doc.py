@@ -4,7 +4,7 @@ from uuid import UUID
 import pytest
 
 from core.exceptions import UserNotFoundError, StorageServiceError, DocNotFoundError
-from schema.doc import DocCreate, DocFormat, DocType, DocUpdateStatus, DocStatus
+from schema.doc import DocCreate, DocFormat, DocType, DocStatus, DocEventStatus
 from services.doc_service import DocService
 from tests.conftest import patch_async_cls
 from utils.storage import MinioClient
@@ -62,11 +62,13 @@ async def test_create_when_storage_client_error_then_raise_storage_error(
 
 @pytest.mark.anyio
 async def test_update_status_when_doc_not_exist_then_raise_404(mock_user, mock_cv):
-    doc_update_status = DocUpdateStatus(status=DocStatus.UPLOADED)
+    doc_update_status = DocEventStatus(
+        user_id=mock_user.id, doc_id=mock_cv.id, EventName="s3:ObjectCreated:Put"
+    )
+    with patch_async_cls("services.doc_service.UserRepository"):
+        with patch_async_cls("services.doc_service.DocRepository") as mock_doc_repo:
+            mock_doc_repo.get_by_id.return_value = None
 
-    with patch_async_cls("services.doc_service.DocRepository") as mock_doc_repo:
-        mock_doc_repo.get_by_id.return_value = None
-
-        with pytest.raises(DocNotFoundError):
-            service = DocService(AsyncMock(), AsyncMock())
-            await service.update_status(mock_cv.id, doc_update_status)
+            with pytest.raises(DocNotFoundError):
+                service = DocService(AsyncMock(), AsyncMock())
+                await service.update_status(doc_update_status)
