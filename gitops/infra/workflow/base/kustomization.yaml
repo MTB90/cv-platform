@@ -3,5 +3,3 @@ kind: Kustomization
 
 resources:
 - github.com/argoproj/argo-workflows//manifests/cluster-install?ref=v3.7.0
-
-namespace: argo
