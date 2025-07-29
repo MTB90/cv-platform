@@ -98,7 +98,7 @@ async def business_error_handler(request: Request, exc: AppException):
 
 @app.exception_handler(Exception)
 async def unexpected_error_handler(request: Request, exc: Exception):
-    logger.error(f"unexpected error", extra={"type": type(exc).__name__, "exc": str(exc)})
+    logger.error("unexpected error", extra={"type": type(exc).__name__, "exc": str(exc)})
     response = JSONResponse(
         status_code=500,
         content={"detail": [{"type": type(exc).__name__, "msg": "Internal server error"}]},
