@@ -17,7 +17,7 @@ interaction with other components is described. The architecture revolves around
                                                         ▼                                              │  
                                                  ┌────────────────┐                                    │  
       ┌────────────────┐                         │    (api/v1)    │                                    ▼
-      │  Argo Workflow │                         │--─------------ │     generate pre-signed-url    ┌─────────┐
+      │  Argo Workflow │                         │--------------- │     generate pre-signed-url    ┌─────────┐
       │                │ <───── hera client ─────│    Backend     │ <──── minio async client ────> │  MinIO  │
       └────────────────┘                         │                │                                │         │
             │                                    │                │                                │         │
