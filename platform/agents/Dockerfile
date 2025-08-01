@@ -44,4 +44,4 @@ COPY --chown=appuser:appuser ./app /app
 # Switch to non-root user
 USER appuser
 
-ENTRYPOINT ["gunicorn", "-k", "uvicorn.workers.UvicornWorker", "-w", "4", "main:app", "--bind", "0.0.0.0:8000", "--log-level", "info", "--access-logfile", "/dev/null"]
+ENTRYPOINT ["python"]
