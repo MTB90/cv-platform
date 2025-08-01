@@ -4,5 +4,4 @@
   - FastAPI
   - PyTest
   - Pydantic
-- Redis/RabbitMQ
 - Postgresql

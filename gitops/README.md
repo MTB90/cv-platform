@@ -30,7 +30,19 @@ Based on:
 │   └── gitops-controller
 │       └── kustomization.yaml
 ├── infra
-│   └── posgresql
+│   ├── minio
+│   │   ├── base
+│   │   │   └── kustomization.yaml
+│   │   └── overlays
+│   │       └── minikube
+│   │           └── kustomization.yaml
+│   ├── postgresql
+│   │   ├── base
+│   │   │   └── kustomization.yaml
+│   │   └── overlays
+│   │       └── minikube
+│   │           └── kustomization.yaml
+│   └── workflow
 │       ├── base
 │       │   └── kustomization.yaml
 │       └── overlays
