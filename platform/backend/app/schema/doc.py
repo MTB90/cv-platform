@@ -40,6 +40,8 @@ class DocResponse(DocBase):
 class DocEventStatus(BaseModel):
     user_id: UUID
     doc_id: UUID
+
+    key: str = Field(alias="Key")
     event_name: str = Field(alias="EventName")
 
     @field_validator("event_name", mode="after")

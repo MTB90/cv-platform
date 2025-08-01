@@ -61,10 +61,25 @@ async def test_create_when_storage_client_error_then_raise_storage_error(
 
 
 @pytest.mark.anyio
+async def test_update_status_when_user_not_exist_then_raise_404(mock_user, mock_cv):
+    doc_update_status = DocEventStatus(
+        Key=f"bucket/{mock_user.id}/{mock_cv.id}.pdf", EventName="s3:ObjectCreated:Put"
+    )
+
+    with patch_async_cls("services.doc_service.UserRepository") as mock_user_repo:
+        mock_user_repo.get_by_id.return_value = None
+
+        with pytest.raises(NotFoundError):
+            service = DocService(AsyncMock(), AsyncMock())
+            await service.update_status(doc_update_status)
+
+
+@pytest.mark.anyio
 async def test_update_status_when_doc_not_exist_then_raise_404(mock_user, mock_cv):
     doc_update_status = DocEventStatus(
-        user_id=mock_user.id, doc_id=mock_cv.id, EventName="s3:ObjectCreated:Put"
+        Key=f"bucket/{mock_user.id}/{mock_cv.id}.pdf", EventName="s3:ObjectCreated:Put"
     )
+
     with patch_async_cls("services.doc_service.UserRepository"):
         with patch_async_cls("services.doc_service.DocRepository") as mock_doc_repo:
             mock_doc_repo.get_by_id.return_value = None
@@ -72,3 +87,20 @@ async def test_update_status_when_doc_not_exist_then_raise_404(mock_user, mock_c
             with pytest.raises(NotFoundError):
                 service = DocService(AsyncMock(), AsyncMock())
                 await service.update_status(doc_update_status)
+
+
+@pytest.mark.anyio
+async def test_update_status_when_doc_found_then_update_status(mock_user, mock_cv):
+    doc_update_status = DocEventStatus(
+        Key=f"bucket/{mock_user.id}/{mock_cv.id}.pdf", EventName="s3:ObjectCreated:Put"
+    )
+
+    with patch_async_cls("services.doc_service.UserRepository") as mock_user_repo:
+        mock_user_repo.get_by_id.return_value = mock_user
+
+        with patch_async_cls("services.doc_service.DocRepository") as mock_doc_repo:
+            mock_doc_repo.get_by_id.return_value = mock_cv
+
+            service = DocService(AsyncMock(), AsyncMock())
+            await service.update_status(doc_update_status)
+            mock_doc_repo.add_and_commit.assert_called_once()
