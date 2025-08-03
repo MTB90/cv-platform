@@ -3,3 +3,6 @@ kind: Kustomization
 
 resources:
 - github.com/argoproj/argo-workflows//manifests/cluster-install?ref=v3.7.0
+- workflow-sa.yaml
+- workflow-role.yaml
+- workflow-secret.yaml

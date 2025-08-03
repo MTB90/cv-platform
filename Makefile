@@ -40,6 +40,10 @@ minio-api-port-forward:
 argocd-init-password:
 	kubectl get secrets argocd-initial-admin-secret -n argocd -o jsonpath='{.data.password}' | base64 --decode
 
+.PHONY:argo-ui-token
+argo-ui-token:
+	kubectl get secrets argo-ui -n cv-platform -o jsonpath='{.data.token}' | base64 --decode
+
 .PHONY:cv-platform-apply
 cv-platform-apply: argocd-crds
 	kustomize build gitops/bootstrap/overlays/default | kubectl apply -f -
