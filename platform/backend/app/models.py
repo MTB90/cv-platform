@@ -37,3 +37,19 @@ class User(SQLModel, table=True):
     created_at: datetime = Field(
         sa_column=Column(DateTime(), server_default=func.now(), nullable=False)
     )
+
+
+class Job(SQLModel, table=True):
+    __tablename__ = "jobs"
+
+    id: UUID = Field(default_factory=uuid4, nullable=False, primary_key=True)
+    type: str = Field(sa_column=Column(String(50), nullable=False))
+    source_id: UUID = Field(default=None, nullable=False, foreign_key="docs.id")
+    result_id: UUID = Field(default=None, nullable=False, foreign_key="docs.id")
+
+    created_at: datetime = Field(
+        sa_column=Column(DateTime(), server_default=func.now(), nullable=False)
+    )
+    updated_at: Optional[datetime] = Field(
+        sa_column=Column(DateTime(), server_default=func.now(), nullable=False)
+    )

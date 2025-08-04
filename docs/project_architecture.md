@@ -89,10 +89,10 @@ interaction with other components is described. The architecture revolves around
 |---------|------------------------------------|---------------------------------|
 | POST    | `/api/private/webooks/docs/status` | Update status uploaded that doc |
 
-** Jobs:**
+**Jobs:**
 
 | Methods | Url                                     | Description                 |
 |---------|-----------------------------------------|-----------------------------|
 | POST    | `/api/v1/users/{user_id}/jobs`          | Start process user docs     |
 | GET     | `/api/v1/users/{user_id}/jobs/{job_id}` | Check status of the process |
-| DELETE  | `/api/v1/users/{user_id}/jobs/{job_id}` | Cancel job                  |
+
