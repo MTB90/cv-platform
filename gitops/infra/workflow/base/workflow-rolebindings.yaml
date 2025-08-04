@@ -15,12 +15,12 @@ roleRef:
 apiVersion: rbac.authorization.k8s.io/v1
 kind: RoleBinding
 metadata:
-  name: argo-executor-binding
+  name: workflow-executor-binding
 subjects:
   - kind: ServiceAccount
-    name: argo-executor
+    name: workflow-executor
     namespace: cv-platform
 roleRef:
   kind: Role
-  name: argo-executor-role
+  name: workflow-executor-role
   apiGroup: rbac.authorization.k8s.io

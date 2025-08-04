@@ -15,6 +15,7 @@ spec:
       labels:
         app: backend
     spec:
+      serviceAccountName: backend
       initContainers:
       - image: cv-platform-backend
         imagePullPolicy: IfNotPresent
