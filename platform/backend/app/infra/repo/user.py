@@ -6,7 +6,7 @@ from sqlalchemy import select
 from sqlalchemy.exc import IntegrityError
 
 from core.exceptions import ConflictError
-from domain.models import User
+from domain.user import User
 from infra.models import UserModel
 from infra.repo.base import BaseRepository
 
@@ -18,27 +18,16 @@ class UserRepository(BaseRepository):
         result = await self.db.execute(select(UserModel))
         user_records = result.scalars().all()
 
-        return [
-            User(
-                id=user_record.id,
-                name=user_record.name,
-                email=user_record.email,
-                created_at=user_record.created_at,
-            )
-            for user_record in user_records
-        ]
+        return [User(**user_record.__dict__) for user_record in user_records]
 
     async def get_by_id(self, user_id: UUID) -> Optional[User]:
         result = await self.db.execute(select(UserModel).where(UserModel.id == user_id))
         user_record = result.scalar_one_or_none()
 
-        user = User(
-            id=user_record.id,
-            name=user_record.name,
-            email=user_record.email,
-            created_at=user_record.created_at,
-        )
-        return user
+        if user_record is None:
+            return None
+
+        return User(**user_record.__dict__)
 
     async def create(self, user: User) -> User:
         user_record = UserModel(

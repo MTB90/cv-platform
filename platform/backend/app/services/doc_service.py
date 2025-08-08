@@ -5,6 +5,7 @@ from uuid import UUID, uuid4
 from sqlmodel.ext.asyncio.session import AsyncSession
 
 from core.exceptions import UserNotFoundError, DocNotFoundError
+from domain.doc import Doc, DocStatus
 from infra.repo.doc import DocRepository
 from infra.repo.user import UserRepository
 from schema.doc import DocCreate, DocEventStatus, DocResponse
@@ -33,7 +34,15 @@ class DocService:
         logger.info("get presigned url for upload")
         presigned_url = await self._storage.presigned_put_object(object_name)
 
-        doc = await self._doc_repo.create(user_id, doc_id, data)
+        doc_create = Doc(
+            id=doc_id,
+            user_id=user_id,
+            name=data.name,
+            type=data.type,
+            format=data.format,
+            status=DocStatus.UPLOADING,
+        )
+        doc = await self._doc_repo.create(doc_create)
         logger.info("doc created", extra={"doc": doc})
 
         return DocResponse(**doc.__dict__, presigned_url=presigned_url)

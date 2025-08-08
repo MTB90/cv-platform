@@ -1,41 +1,24 @@
-from enum import Enum
 from typing import Any
 from uuid import UUID
 
 from pydantic import HttpUrl, BaseModel, constr, model_validator, Field, field_validator
 from pydantic_core import PydanticCustomError, InitErrorDetails, ValidationError
 
-
-class DocType(str, Enum):
-    CV = "CV"
+from domain.doc import DocType, DocFormat, DocStatus
 
 
-class DocFormat(str, Enum):
-    PDF = "pdf"
-    TXT = "txt"
-
-
-class DocStatus(str, Enum):
-    UPLOADING = "uploading"
-    PROCESSING = "processing"
-    DELETED = "deleted"
-    FAILED = "failed"
-    READY = "ready"
-
-
-class DocBase(BaseModel):
+class DocCreate(BaseModel):
     name: constr(max_length=255)
     type: DocType
     format: DocFormat
-    status: DocStatus = DocStatus.UPLOADING
 
 
-class DocCreate(DocBase):
-    pass
-
-
-class DocResponse(DocBase):
+class DocResponse(BaseModel):
     id: UUID
+    name: constr(max_length=255)
+    type: DocType
+    format: DocFormat
+    status: DocStatus
     presigned_url: HttpUrl
 
 
@@ -48,7 +31,7 @@ class DocEventStatus(BaseModel):
 
     @field_validator("event_name", mode="after")
     @classmethod
-    def is_even(cls, value: str) -> str:
+    def validate_event(cls, value: str) -> str:
         if value in ["s3:ObjectCreated:Post", "s3:ObjectCreated:Put"]:
             return DocStatus.READY
 
