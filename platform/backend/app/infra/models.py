@@ -8,7 +8,7 @@ from sqlmodel import Field, SQLModel
 from schema.doc import DocStatus
 
 
-class Doc(SQLModel, table=True):
+class DocModel(SQLModel, table=True):
     __tablename__ = "docs"
 
     id: Optional[UUID] = Field(default_factory=uuid4, primary_key=True)
@@ -28,7 +28,7 @@ class Doc(SQLModel, table=True):
     )
 
 
-class User(SQLModel, table=True):
+class UserModel(SQLModel, table=True):
     __tablename__ = "users"
 
     id: UUID = Field(default_factory=uuid4, nullable=False, primary_key=True)
@@ -39,13 +39,13 @@ class User(SQLModel, table=True):
     )
 
 
-class Job(SQLModel, table=True):
+class JobModel(SQLModel, table=True):
     __tablename__ = "jobs"
 
     id: UUID = Field(default_factory=uuid4, nullable=False, primary_key=True)
     type: str = Field(sa_column=Column(String(50), nullable=False))
-    source_id: UUID = Field(default=None, nullable=False, foreign_key="docs.id")
-    result_id: UUID = Field(default=None, nullable=False, foreign_key="docs.id")
+    source_id: UUID = Field(default=None, nullable=False, foreign_key="docs.id", index=True)
+    result_id: UUID = Field(default=None, nullable=False, foreign_key="docs.id", index=True)
 
     created_at: datetime = Field(
         sa_column=Column(DateTime(), server_default=func.now(), nullable=False)

@@ -4,7 +4,7 @@ from uuid import UUID
 from sqlmodel.ext.asyncio.session import AsyncSession
 
 from core.exceptions import UserNotFoundError
-from repository.user import UserRepository
+from infra.repo.user import UserRepository
 from schema.user import UserCreate, UserResponse
 
 logger = logging.getLogger(__name__)

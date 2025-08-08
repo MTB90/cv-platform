@@ -7,7 +7,7 @@ from core.exceptions import ServiceUnavailableError, NotFoundError
 from schema.doc import DocCreate, DocFormat, DocType, DocEventStatus
 from services.doc_service import DocService
 from tests.conftest import patch_async_cls
-from utils.storage import MinioClient
+from utils.storage import StorageClient
 
 
 @pytest.mark.anyio
@@ -53,7 +53,7 @@ async def test_create_when_storage_client_error_then_raise_storage_error(
     with patch_async_cls("services.doc_service.UserRepository") as mock_user_repo:
         with patch_async_cls("services.doc_service.DocRepository") as mock_doc_repo:
             with pytest.raises(ServiceUnavailableError):
-                service = DocService(AsyncMock(), MinioClient(mock_settings))
+                service = DocService(AsyncMock(), StorageClient(mock_settings))
                 await service.create(mock_user.id, doc_create)
 
             mock_user_repo.get_by_id.assert_called_once()

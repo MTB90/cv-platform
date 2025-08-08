@@ -3,13 +3,14 @@ from datetime import timedelta
 
 from miniopy_async import Minio
 
+from core.config import Settings
 from core.exceptions import ServiceUnavailableError
 
 logger = logging.getLogger(__name__)
 
 
-class MinioClient:
-    def __init__(self, settings):
+class StorageClient:
+    def __init__(self, settings: Settings):
         self._bucket_name = settings.CV_BACKEND_MINIO_BUCKET_NAME
         self._client = Minio(
             endpoint=settings.CV_BACKEND_MINIO_ENDPOINT,

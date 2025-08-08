@@ -1,6 +1,7 @@
 from enum import Enum
+from uuid import UUID
 
-from pydantic import BaseModel, constr
+from pydantic import BaseModel
 
 
 class JobType(str, Enum):
@@ -15,9 +16,9 @@ class JobStatus(str, Enum):
 
 
 class JobBase(BaseModel):
-    name: constr(max_length=255)
     type: JobType
     status: JobStatus = JobStatus.PENDING
+    source_id: UUID
 
 
 class JobCreate(JobBase):
