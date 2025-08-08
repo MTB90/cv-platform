@@ -1,4 +1,5 @@
 import logging
+import datetime
 from uuid import UUID, uuid4
 
 from sqlmodel.ext.asyncio.session import AsyncSession
@@ -49,5 +50,7 @@ class DocService:
             raise DocNotFoundError(data.doc_id)
 
         doc.status = data.event_name
+        doc.updated_at = datetime.datetime.now(datetime.UTC)
+
         await self._doc_repo.add_and_commit(doc)
         logger.info("doc updated", extra={"doc": doc})

@@ -16,16 +16,18 @@ class DocFormat(str, Enum):
 
 
 class DocStatus(str, Enum):
-    PENDING = "pending"
-    CREATED = "created"
-    REMOVED = "removed"
+    UPLOADING = "uploading"
+    PROCESSING = "processing"
+    DELETED = "deleted"
+    FAILED = "failed"
+    READY = "ready"
 
 
 class DocBase(BaseModel):
     name: constr(max_length=255)
     type: DocType
     format: DocFormat
-    status: DocStatus = DocStatus.PENDING
+    status: DocStatus = DocStatus.UPLOADING
 
 
 class DocCreate(DocBase):
@@ -48,10 +50,10 @@ class DocEventStatus(BaseModel):
     @classmethod
     def is_even(cls, value: str) -> str:
         if value in ["s3:ObjectCreated:Post", "s3:ObjectCreated:Put"]:
-            return DocStatus.CREATED
+            return DocStatus.READY
 
         if value == "s3:ObjectRemoved:Delete":
-            return DocStatus.REMOVED
+            return DocStatus.DELETED
 
         raise ValueError("unsupported event")
 

@@ -17,7 +17,7 @@ class Doc(SQLModel, table=True):
     type: str = Field(sa_column=Column(String(50), nullable=False))
     format: str = Field(sa_column=Column(String(50), nullable=False))
     status: str = Field(
-        sa_column=Column(String(50), nullable=False, default=DocStatus.PENDING.value)
+        sa_column=Column(String(50), nullable=False, default=DocStatus.UPLOADING.value)
     )
 
     created_at: datetime = Field(

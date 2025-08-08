@@ -14,7 +14,7 @@ from app.schema.doc import DocStatus, DocEventStatus
             {
                 "user_id": UUID("17619270-9141-4b9d-ac97-c42584d12cbb"),
                 "doc_id": UUID("f5d3a088-3ca2-443e-930c-ac20adaf2fc6"),
-                "event_name": DocStatus.CREATED,
+                "event_name": DocStatus.READY,
             },
             id="create",
         ),
@@ -24,7 +24,7 @@ from app.schema.doc import DocStatus, DocEventStatus
             {
                 "user_id": UUID("17619270-9141-4b9d-ac97-c42584d12cbb"),
                 "doc_id": UUID("f5d3a088-3ca2-443e-930c-ac20adaf2fc6"),
-                "event_name": DocStatus.REMOVED,
+                "event_name": DocStatus.DELETED,
             },
             id="delete",
         ),

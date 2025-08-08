@@ -10,5 +10,5 @@ router = APIRouter(prefix="/users", tags=["docs"])
 
 
 @router.post("/{user_id}/docs", response_model=DocResponse, status_code=status.HTTP_201_CREATED)
-async def create_docs(user_id: UUID, data: DocCreate, service: DocServiceDep):
+async def create_doc(user_id: UUID, data: DocCreate, service: DocServiceDep):
     return await service.create(user_id, data)

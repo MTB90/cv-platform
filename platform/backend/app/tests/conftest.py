@@ -60,7 +60,7 @@ def mock_cv():
         name="CV",
         user_id=UUID("16229579-de59-44a6-9b51-dec60bd50680"),
         type=DocType.CV,
-        status=DocStatus.PENDING,
+        status=DocStatus.UPLOADING,
         format=DocFormat.PDF,
         created_at=datetime.strptime(date_string, "%Y-%m-%d %H:%M:%S"),
         updated_at=datetime.strptime(date_string, "%Y-%m-%d %H:%M:%S"),
