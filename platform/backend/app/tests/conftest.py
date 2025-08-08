@@ -6,7 +6,8 @@ from uuid import UUID
 import pytest
 
 from core.config import Settings
-from infra.models import UserModel, DocModel
+from domain.doc import Doc
+from domain.user import User
 from schema.doc import DocFormat, DocType, DocStatus
 from schema.user import UserResponse
 
@@ -43,7 +44,7 @@ def patch_async_cls(patch_path: str):
 def mock_user():
     date_string = "2024-09-19 15:45:30"
 
-    return UserModel(
+    return User(
         id=UUID("16229579-de59-44a6-9b51-dec60bd50680"),
         name="user",
         email="user@email.com",
@@ -55,7 +56,7 @@ def mock_user():
 def mock_cv():
     date_string = "2024-09-19 15:45:30"
 
-    return DocModel(
+    return Doc(
         id=UUID("a75c7d8a-d306-4b2f-8b09-35e3a903471f"),
         name="CV",
         user_id=UUID("16229579-de59-44a6-9b51-dec60bd50680"),

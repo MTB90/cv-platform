@@ -4,7 +4,7 @@ from uuid import UUID, uuid4
 from sqlmodel.ext.asyncio.session import AsyncSession
 
 from core.exceptions import UserNotFoundError
-from domain.models import User
+from domain.user import User
 from infra.repo.user import UserRepository
 from schema.user import UserCreate, UserResponse
 
@@ -17,13 +17,9 @@ class UserService:
 
     async def create_user(self, data: UserCreate) -> UserResponse:
         logger.info("creating new user", extra={"user_name": data.name})
-        user = User(
-            id=uuid4(),
-            name=data.name,
-            email=data.email,
-        )
+        user_create = User(id=uuid4(), name=data.name, email=data.email)
+        user = await self._user_repo.create(user_create)
 
-        user = await self._user_repo.create(user)
         logger.info("user created", extra={"user_name": data.name})
         return UserResponse(**user.__dict__)
 
