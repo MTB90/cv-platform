@@ -6,36 +6,56 @@ from sqlalchemy import select
 from sqlalchemy.exc import IntegrityError
 
 from core.exceptions import ConflictError
-from infra.repo.base import BaseRepository
+from domain.models import User
 from infra.models import UserModel
-from schema.user import UserCreate
+from infra.repo.base import BaseRepository
 
 logger = logging.getLogger(__name__)
 
 
 class UserRepository(BaseRepository):
-    async def get_all(self) -> Sequence[UserModel]:
+    async def get_all(self) -> Sequence[User]:
         result = await self.db.execute(select(UserModel))
-        return result.scalars().all()
+        user_records = result.scalars().all()
 
-    async def get_by_id(self, user_id: UUID) -> Optional[UserModel]:
+        return [
+            User(
+                id=user_record.id,
+                name=user_record.name,
+                email=user_record.email,
+                created_at=user_record.created_at,
+            )
+            for user_record in user_records
+        ]
+
+    async def get_by_id(self, user_id: UUID) -> Optional[User]:
         result = await self.db.execute(select(UserModel).where(UserModel.id == user_id))
-        return result.scalar_one_or_none()
+        user_record = result.scalar_one_or_none()
 
-    async def create(self, user_data: UserCreate) -> UserModel:
-        user = UserModel(
-            name=user_data.name,
-            email=user_data.email,
+        user = User(
+            id=user_record.id,
+            name=user_record.name,
+            email=user_record.email,
+            created_at=user_record.created_at,
+        )
+        return user
+
+    async def create(self, user: User) -> User:
+        user_record = UserModel(
+            id=user.id,
+            name=user.name,
+            email=user.email,
         )
 
         try:
-            await self.add_and_commit(user)
+            await self.add_and_commit(user_record)
         except IntegrityError:
             raise ConflictError(
                 message="User Creation Failed",
                 field="email",
                 expected="unique email",
             )
+        await self.db.refresh(user_record)
 
-        await self.db.refresh(user)
+        user.created_at = user_record.created_at
         return user
