@@ -2,7 +2,7 @@ import logging
 from abc import ABC
 from functools import wraps
 
-from sqlalchemy.ext.asyncio import AsyncSession
+from sqlmodel.ext.asyncio.session import AsyncSession
 
 logger = logging.getLogger(__name__)
 
@@ -31,15 +31,12 @@ def exception_logger(f):
 
 
 class BaseRepository(ABC):
-    def __init__(self, db: AsyncSession):
-        self.db = db
+    @exception_logger
+    async def add_and_commit(self, db_session: AsyncSession, obj):
+        db_session.add(obj)
+        await db_session.commit()
 
     @exception_logger
-    async def add_and_commit(self, obj):
-        self.db.add(obj)
-        await self.db.commit()
-
-    @exception_logger
-    async def add_and_flush(self, obj):
-        self.db.add(obj)
-        await self.db.flush()
+    async def add_and_flush(self, db_session: AsyncSession, obj):
+        db_session.add(obj)
+        await db_session.flush()

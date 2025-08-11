@@ -15,12 +15,12 @@ async def test_create_when_no_user_then_raise_404():
     mock_user_id = UUID("a32ec7b9-9d23-4b21-bfe4-3c3762116332")
     doc_create = DocCreate(name="MyCV", format=DocFormat.PDF, type=DocType.CV)
 
-    with patch_async_cls("services.doc_service.UserRepository") as mock_user_repo:
-        mock_user_repo.get_by_id.return_value = None
+    mock_user_repo = AsyncMock()
+    mock_user_repo.get_by_id.return_value = None
 
-        service = DocService(AsyncMock(), AsyncMock())
-        with pytest.raises(NotFoundError):
-            await service.create(mock_user_id, doc_create)
+    service = DocService(AsyncMock(), AsyncMock(), mock_user_repo, AsyncMock())
+    with pytest.raises(NotFoundError):
+        await service.create(mock_user_id, doc_create)
 
 
 @pytest.mark.anyio
@@ -31,15 +31,15 @@ async def test_create_when_no_errors_then_call_pre_signed_url(mock_user, mock_cv
     )
 
     doc_create = DocCreate(name=mock_cv.name, type=mock_cv.type, format=mock_cv.format)
+    mock_user_repo = AsyncMock()
+    mock_doc_repo = AsyncMock()
 
-    with patch_async_cls("services.doc_service.UserRepository") as mock_user_repo:
-        with patch_async_cls("services.doc_service.DocRepository") as mock_doc_repo:
-            mock_user_repo.get_by_id.return_value = mock_user
-            mock_doc_repo.create.return_value = mock_cv
+    mock_user_repo.get_by_id.return_value = mock_user
+    mock_doc_repo.create.return_value = mock_cv
 
-            service = DocService(AsyncMock(), mock_storage)
-            await service.create(mock_user.id, doc_create)
-            mock_storage.presigned_put_object.assert_called_once()
+    service = DocService(AsyncMock(), mock_storage, mock_user_repo, mock_doc_repo)
+    await service.create(mock_user.id, doc_create)
+    mock_storage.presigned_put_object.assert_called_once()
 
 
 @pytest.mark.anyio
@@ -50,14 +50,17 @@ async def test_create_when_storage_client_error_then_raise_storage_error(
     mock_mino.return_value.presigned_put_object.side_effect = Exception()
     doc_create = DocCreate(name=mock_cv.name, type=mock_cv.type, format=mock_cv.format)
 
-    with patch_async_cls("services.doc_service.UserRepository") as mock_user_repo:
-        with patch_async_cls("services.doc_service.DocRepository") as mock_doc_repo:
-            with pytest.raises(ServiceUnavailableError):
-                service = DocService(AsyncMock(), StorageClient(mock_settings))
-                await service.create(mock_user.id, doc_create)
+    mock_user_repo = AsyncMock()
+    mock_doc_repo = AsyncMock()
 
-            mock_user_repo.get_by_id.assert_called_once()
-            mock_doc_repo.create.assert_not_called()
+    with pytest.raises(ServiceUnavailableError):
+        service = DocService(
+            AsyncMock(), StorageClient(mock_settings), mock_user_repo, mock_doc_repo
+        )
+        await service.create(mock_user.id, doc_create)
+
+    mock_user_repo.get_by_id.assert_called_once()
+    mock_doc_repo.create.assert_not_called()
 
 
 @pytest.mark.anyio
@@ -66,12 +69,12 @@ async def test_update_status_when_user_not_exist_then_raise_404(mock_user, mock_
         Key=f"bucket/{mock_user.id}/{mock_cv.id}.pdf", EventName="s3:ObjectCreated:Put"
     )
 
-    with patch_async_cls("services.doc_service.UserRepository") as mock_user_repo:
-        mock_user_repo.get_by_id.return_value = None
+    mock_user_repo = AsyncMock()
+    mock_user_repo.get_by_id.return_value = None
 
-        with pytest.raises(NotFoundError):
-            service = DocService(AsyncMock(), AsyncMock())
-            await service.update_status(doc_update_status)
+    with pytest.raises(NotFoundError):
+        service = DocService(AsyncMock(), AsyncMock(), mock_user_repo, AsyncMock())
+        await service.update_status(doc_update_status)
 
 
 @pytest.mark.anyio
@@ -80,13 +83,12 @@ async def test_update_status_when_doc_not_exist_then_raise_404(mock_user, mock_c
         Key=f"bucket/{mock_user.id}/{mock_cv.id}.pdf", EventName="s3:ObjectCreated:Put"
     )
 
-    with patch_async_cls("services.doc_service.UserRepository"):
-        with patch_async_cls("services.doc_service.DocRepository") as mock_doc_repo:
-            mock_doc_repo.get_by_id.return_value = None
+    mock_doc_repo = AsyncMock()
+    mock_doc_repo.get_by_id.return_value = None
 
-            with pytest.raises(NotFoundError):
-                service = DocService(AsyncMock(), AsyncMock())
-                await service.update_status(doc_update_status)
+    with pytest.raises(NotFoundError):
+        service = DocService(AsyncMock(), AsyncMock(), AsyncMock(), mock_doc_repo)
+        await service.update_status(doc_update_status)
 
 
 @pytest.mark.anyio
@@ -95,12 +97,12 @@ async def test_update_status_when_doc_found_then_update_status(mock_user, mock_c
         Key=f"bucket/{mock_user.id}/{mock_cv.id}.pdf", EventName="s3:ObjectCreated:Put"
     )
 
-    with patch_async_cls("services.doc_service.UserRepository") as mock_user_repo:
-        mock_user_repo.get_by_id.return_value = mock_user
+    mock_user_repo = AsyncMock()
+    mock_doc_repo = AsyncMock()
 
-        with patch_async_cls("services.doc_service.DocRepository") as mock_doc_repo:
-            mock_doc_repo.get_by_id.return_value = mock_cv
+    mock_user_repo.get_by_id.return_value = mock_user
+    mock_doc_repo.get_by_id.return_value = mock_cv
 
-            service = DocService(AsyncMock(), AsyncMock())
-            await service.update_status(doc_update_status)
-            mock_doc_repo.add_and_commit.assert_called_once()
+    service = DocService(AsyncMock(), AsyncMock(), mock_user_repo, mock_doc_repo)
+    await service.update_status(doc_update_status)
+    mock_doc_repo.add_and_commit.assert_called_once()

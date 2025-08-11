@@ -32,13 +32,9 @@ class ArgoClient:
                 "serviceAccountName": "workflow-executor",
                 "entrypoint": entrypoint,
                 "templates": templates,
-                "ttlStrategy": {
-                    "secondsAfterCompletion": 60
-                },
-                "podGC": {
-                    "strategy": "OnPodCompletion"
-                }
-            }
+                "ttlStrategy": {"secondsAfterCompletion": 60},
+                "podGC": {"strategy": "OnPodCompletion"},
+            },
         }
 
         return await asyncio.to_thread(
@@ -52,14 +48,16 @@ class ArgoClient:
 
     async def create_formating_workflow(self, namespace: str, name: str):
         entrypoint = "formating"
-        templates = [{
-            "name": "formating",
-            "container": {
-                "image": "python:3.12-slim",
-                "command": ["python", "-c"],
-                "args": [
-                    "import time; print('Starting sleep...'); time.sleep(10); print('Done!')"
-                ]
+        templates = [
+            {
+                "name": "formating",
+                "container": {
+                    "image": "python:3.12-slim",
+                    "command": ["python", "-c"],
+                    "args": [
+                        "import time; print('Starting sleep...'); time.sleep(10); print('Done!')"
+                    ],
+                },
             }
-        }]
+        ]
         await self._create_workflow(namespace, name, entrypoint, templates)

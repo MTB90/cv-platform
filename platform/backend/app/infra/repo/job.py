@@ -1,22 +1,35 @@
 import logging
+from typing import Optional
+from uuid import UUID
 
+from sqlalchemy import select
 from sqlalchemy.exc import IntegrityError
 
 from core.exceptions import ConflictError
 from domain.job import Job
 from infra.mapper import JobMapper
+from infra.models import JobModel
 from infra.repo.base import BaseRepository
 
 logger = logging.getLogger(__name__)
 
 
 class JobRepository(BaseRepository):
-    async def create(self, job: Job) -> Job:
+    async def get_by_id(self, db_session, job_id: UUID) -> Optional[Job]:
+        result = await db_session.exec(select(JobModel).where(JobModel.id == job_id))
+        job_record = result.scalar_one_or_none()
+
+        if job_record is None:
+            return None
+
+        return JobMapper.to_domain(job_record)
+
+    async def create(self, db_session, job: Job) -> Job:
         job_record = JobMapper.from_domain(job)
 
         try:
-            await self.add_and_commit(job_record)
+            await self.add_and_commit(db_session, job_record)
         except IntegrityError:
-            raise ConflictError("Doc Creation Failed")
+            raise ConflictError("Job Creation Failed")
 
         return job

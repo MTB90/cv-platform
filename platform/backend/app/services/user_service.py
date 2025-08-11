@@ -13,8 +13,9 @@ logger = logging.getLogger(__name__)
 
 
 class UserService:
-    def __init__(self, db: AsyncSession):
-        self._user_repo = UserRepository(db)
+    def __init__(self, db_session: AsyncSession, user_repo: UserRepository):
+        self._db_session = db_session
+        self._user_repo = user_repo
 
     async def create_user(self, data: UserCreate) -> UserResponse:
         logger.info("creating new user", extra={"user_name": data.name})
@@ -24,20 +25,20 @@ class UserService:
             email=data.email,
             created_at=datetime.datetime.now(datetime.UTC),
         )
-        user = await self._user_repo.create(user_create)
+        user = await self._user_repo.create(self._db_session, user_create)
 
         logger.info("user created", extra={"user_name": data.name})
         return UserResponse(**user.__dict__)
 
     async def list_all_users(self):
         logger.info("list all users")
-        users = await self._user_repo.get_all()
+        users = await self._user_repo.get_all(self._db_session)
         return [UserResponse(**user.__dict__) for user in users]
 
     async def get_user_by_id(self, user_id: UUID):
         logger.info("get user", extra={"user_id": user_id})
 
-        user = await self._user_repo.get_by_id(user_id)
+        user = await self._user_repo.get_by_id(self._db_session, user_id)
         if user is None:
             raise UserNotFoundError(user_id)
 

@@ -1,3 +1,4 @@
+import datetime
 import logging
 from uuid import UUID, uuid4
 
@@ -14,18 +15,24 @@ logger = logging.getLogger(__name__)
 
 
 class JobService:
-    def __init__(self, db: AsyncSession):
-        self._db = db
-        self._user_repo = UserRepository(db)
-        self._doc_repo = DocRepository(db)
-        self._job_repo = JobRepository(db)
+    def __init__(
+        self,
+        db_session: AsyncSession,
+        user_repo: UserRepository,
+        doc_repo: DocRepository,
+        job_repo: JobRepository,
+    ):
+        self._db_session = db_session
+        self._user_repo = user_repo
+        self._doc_repo = doc_repo
+        self._job_repo = job_repo
 
     async def create(self, user_id: UUID, data: JobCreate):
-        user = await self._user_repo.get_by_id(user_id)
+        user = await self._user_repo.get_by_id(self._db_session, user_id)
         if user is None:
             raise UserNotFoundError(user_id)
 
-        source_doc = await self._doc_repo.get_by_id(data.source_id)
+        source_doc = await self._doc_repo.get_by_id(self._db_session, data.source_id)
         if source_doc is None:
             raise DocNotFoundError(data.source_id)
 
@@ -34,8 +41,10 @@ class JobService:
             user_id=user_id,
             name=data.name,
             type=DocType.CV,
-            format=data.format,
+            format=source_doc.format,
             status=DocStatus.PROCESSING,
+            created_at=datetime.datetime.now(datetime.UTC),
+            updated_at=datetime.datetime.now(datetime.UTC),
         )
 
         logger.info("create result document entity", extra={"data": result_doc})
