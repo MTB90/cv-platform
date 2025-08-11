@@ -11,6 +11,6 @@ class UserCreate(BaseModel):
 
 class UserResponse(BaseModel):
     id: UUID
-    name: constr(max_length=255)
-    email: constr(max_length=255)
+    name: str
+    email: str
     created_at: datetime

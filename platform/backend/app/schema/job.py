@@ -6,5 +6,6 @@ from domain.job import JobType
 
 
 class JobCreate(BaseModel):
+    name: str
     type: JobType
     source_id: UUID
