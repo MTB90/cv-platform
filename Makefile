@@ -1,3 +1,7 @@
+SHELL := /bin/bash
+
+MINIO:=mc
+
 .PHONY:minikube-start
 minikube-start:
 	minikube start --profile cv-platform-minikube --gpus all --driver docker --container-runtime docker --cpus=8 --memory=16384
@@ -35,6 +39,12 @@ minio-web-port-forward:
 .PHONY:minio-api-port-forward
 minio-api-port-forward:
 	kubectl port-forward service/minio 9000:api -n cv-platform
+
+.PHONY: minio-configure-bucket
+minio-configure-bucket:
+	$(MINIO) alias set local http://127.0.0.1:9000 minioAccessKey minioSecretKey
+	@$(MINIO) mb local/minio-platform-docs || echo "Bucket already exist"
+	@$(MINIO) event add local/minio-platform-docs arn:minio:sqs::DOC_STATUS:webhook --event put || echo "Webhook already exist"
 
 .PHONY:argocd-init-password
 argocd-init-password:

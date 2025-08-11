@@ -54,12 +54,9 @@ class DocService:
         if user is None:
             raise UserNotFoundError(data.user_id)
 
-        doc = await self._doc_repo.get_by_id(data.doc_id)
+        updated_at = datetime.datetime.now(datetime.UTC)
+        doc = await self._doc_repo.update_status(data.doc_id, data.event_name, updated_at)
         if doc is None:
             raise DocNotFoundError(data.doc_id)
 
-        doc.status = data.event_name
-        doc.updated_at = datetime.datetime.now(datetime.UTC)
-
-        await self._doc_repo.add_and_commit(doc)
         logger.info("doc updated", extra={"doc": doc})

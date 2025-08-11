@@ -1,4 +1,5 @@
 import logging
+from datetime import datetime
 from typing import Optional
 from uuid import UUID
 
@@ -6,7 +7,7 @@ from sqlalchemy import select
 from sqlalchemy.exc import IntegrityError
 
 from core.exceptions import ConflictError
-from domain.doc import Doc
+from domain.doc import Doc, DocStatus
 from infra.mapper import DocMapper
 from infra.models import DocModel
 from infra.repo.base import BaseRepository
@@ -33,3 +34,17 @@ class DocRepository(BaseRepository):
             raise ConflictError("Doc Creation Failed")
 
         return doc
+
+    async def update_status(
+        self, doc_id: UUID, status: DocStatus, updated_at: datetime
+    ) -> Optional[Doc]:
+        result = await self.db.execute(select(DocModel).where(DocModel.id == doc_id))
+        doc_record: DocModel = result.scalar_one_or_none()
+
+        doc_record.status = status
+        doc_record.updated_at = updated_at
+
+        try:
+            await self.add_and_commit(doc_record)
+        except IntegrityError:
+            raise ConflictError("Doc Update Failed")

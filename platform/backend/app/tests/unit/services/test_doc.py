@@ -81,7 +81,7 @@ async def test_update_status_when_doc_not_exist_then_raise_404(mock_user, mock_c
     )
 
     mock_doc_repo = AsyncMock()
-    mock_doc_repo.get_by_id.return_value = None
+    mock_doc_repo.update_status.return_value = None
 
     with pytest.raises(NotFoundError):
         service = DocService(AsyncMock(), AsyncMock(), mock_doc_repo)
@@ -102,4 +102,4 @@ async def test_update_status_when_doc_found_then_update_status(mock_user, mock_c
 
     service = DocService(AsyncMock(), mock_user_repo, mock_doc_repo)
     await service.update_status(doc_update_status)
-    mock_doc_repo.add_and_commit.assert_called_once()
+    mock_doc_repo.update_status.assert_called_once()
