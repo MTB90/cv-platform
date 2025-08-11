@@ -41,7 +41,10 @@ class DocService:
             type=data.type,
             format=data.format,
             status=DocStatus.UPLOADING,
+            created_at=datetime.datetime.now(datetime.UTC),
+            updated_at=datetime.datetime.now(datetime.UTC),
         )
+
         doc = await self._doc_repo.create(doc_create)
         logger.info("doc created", extra={"doc": doc})
 

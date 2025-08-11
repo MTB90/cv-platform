@@ -7,6 +7,7 @@ from sqlalchemy.exc import IntegrityError
 
 from core.exceptions import ConflictError
 from domain.doc import Doc
+from infra.mapper import DocMapper
 from infra.models import DocModel
 from infra.repo.base import BaseRepository
 
@@ -21,17 +22,14 @@ class DocRepository(BaseRepository):
         if doc_record is None:
             return None
 
-        return Doc(**doc_record.__dict__)
+        return DocMapper.to_domain(doc_record)
 
     async def create(self, doc: Doc) -> Doc:
-        doc_record = DocModel(**doc.__dict__)
+        doc_record = DocMapper.from_domain(doc)
 
         try:
             await self.add_and_commit(doc_record)
         except IntegrityError:
             raise ConflictError("Doc Creation Failed")
 
-        await self.db.refresh(doc_record)
-
-        doc.created_at = doc_record.created_at
         return doc

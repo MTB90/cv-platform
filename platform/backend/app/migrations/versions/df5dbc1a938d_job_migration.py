@@ -24,6 +24,7 @@ def upgrade() -> None:
         'jobs',
         sa.Column('id', sa.Uuid(), nullable=False),
         sa.Column('type', sa.String(length=50), nullable=False),
+        sa.Column("status", sa.String(length=50), nullable=False, default="pending"),
         sa.Column('source_id', sa.Uuid(), nullable=False),
         sa.Column('result_id', sa.Uuid(), nullable=False),
         sa.Column('created_at', sa.DateTime(), server_default=sa.text('now()'), nullable=False),

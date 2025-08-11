@@ -5,6 +5,7 @@ from uuid import UUID, uuid4
 from sqlalchemy import Column, DateTime, func, String
 from sqlmodel import Field, SQLModel
 
+from domain.job import JobStatus
 from schema.doc import DocStatus
 
 
@@ -44,6 +45,9 @@ class JobModel(SQLModel, table=True):
 
     id: UUID = Field(default_factory=uuid4, nullable=False, primary_key=True)
     type: str = Field(sa_column=Column(String(50), nullable=False))
+    status: str = Field(
+        sa_column=Column(String(50), nullable=False, default=JobStatus.PENDING.value)
+    )
     source_id: UUID = Field(default=None, nullable=False, foreign_key="docs.id", index=True)
     result_id: UUID = Field(default=None, nullable=False, foreign_key="docs.id", index=True)
 

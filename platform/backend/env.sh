@@ -1,7 +1,7 @@
 export CV_BACKEND_DB_HOST=localhost:54321
 export CV_BACKEND_DB_NAME=platform
 export CV_BACKEND_DB_USER=platform
-export CV_BACKEND_DB_PASS=password
+export CV_BACKEND_DB_PASS=platformPassword123
 
 export CV_BACKEND_MINIO_ENDPOINT=localhost:9000
 export CV_BACKEND_MINIO_SERVER_URL=http://localhost:9000

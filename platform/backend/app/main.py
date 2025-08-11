@@ -42,7 +42,7 @@ async def health():
 @app.middleware("http")
 async def http_middleware(request: Request, call_next):
     # Ignore specific endpoints
-    if request.url.path in ["/healthz"]:
+    if request.url.path in ["/healthz", "/healthz/"]:
         return await call_next(request)
 
     # Save to context var and request.state

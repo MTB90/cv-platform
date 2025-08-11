@@ -1,3 +1,4 @@
+import datetime
 import logging
 from uuid import UUID, uuid4
 
@@ -17,7 +18,12 @@ class UserService:
 
     async def create_user(self, data: UserCreate) -> UserResponse:
         logger.info("creating new user", extra={"user_name": data.name})
-        user_create = User(id=uuid4(), name=data.name, email=data.email)
+        user_create = User(
+            id=uuid4(),
+            name=data.name,
+            email=data.email,
+            created_at=datetime.datetime.now(datetime.UTC),
+        )
         user = await self._user_repo.create(user_create)
 
         logger.info("user created", extra={"user_name": data.name})
