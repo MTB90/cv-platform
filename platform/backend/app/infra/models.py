@@ -22,10 +22,10 @@ class DocModel(SQLModel, table=True):
     )
 
     created_at: datetime = Field(
-        sa_column=Column(DateTime(), server_default=func.now(), nullable=False)
+        sa_column=Column(DateTime(timezone=True), server_default=func.now(), nullable=False)
     )
     updated_at: Optional[datetime] = Field(
-        sa_column=Column(DateTime(), server_default=func.now(), nullable=False)
+        sa_column=Column(DateTime(timezone=True), server_default=func.now(), nullable=False)
     )
 
 
@@ -36,7 +36,7 @@ class UserModel(SQLModel, table=True):
     name: str = Field(sa_column=Column(String(255), nullable=False))
     email: str = Field(sa_column=Column(String(255), nullable=False, unique=True))
     created_at: datetime = Field(
-        sa_column=Column(DateTime(), server_default=func.now(), nullable=False)
+        sa_column=Column(DateTime(timezone=True), server_default=func.now(), nullable=False),
     )
 
 
@@ -52,8 +52,8 @@ class JobModel(SQLModel, table=True):
     result_id: UUID = Field(default=None, nullable=False, foreign_key="docs.id", index=True)
 
     created_at: datetime = Field(
-        sa_column=Column(DateTime(), server_default=func.now(), nullable=False)
+        sa_column=Column(DateTime(timezone=True), server_default=func.now(), nullable=False)
     )
     updated_at: Optional[datetime] = Field(
-        sa_column=Column(DateTime(), server_default=func.now(), nullable=False)
+        sa_column=Column(DateTime(timezone=True), server_default=func.now(), nullable=False)
     )

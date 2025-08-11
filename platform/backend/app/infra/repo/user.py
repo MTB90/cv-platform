@@ -15,14 +15,14 @@ logger = logging.getLogger(__name__)
 
 
 class UserRepository(BaseRepository):
-    async def get_all(self, db_session) -> Sequence[User]:
-        result = await db_session.execute(select(UserModel))
+    async def get_all(self) -> Sequence[User]:
+        result = await self.db.execute(select(UserModel))
         user_records = result.scalars().all()
 
         return [UserMapper.to_domain(user_record) for user_record in user_records]
 
-    async def get_by_id(self, db_session, user_id: UUID) -> Optional[User]:
-        result = await db_session.execute(select(UserModel).where(UserModel.id == user_id))
+    async def get_by_id(self, user_id: UUID) -> Optional[User]:
+        result = await self.db.execute(select(UserModel).where(UserModel.id == user_id))
         user_record = result.scalar_one_or_none()
 
         if user_record is None:
@@ -30,11 +30,11 @@ class UserRepository(BaseRepository):
 
         return UserMapper.to_domain(user_record)
 
-    async def create(self, db_session, user: User) -> User:
+    async def create(self, user: User) -> User:
         user_record = UserMapper.from_domain(user)
 
         try:
-            await self.add_and_commit(db_session, user_record)
+            await self.add_and_commit(user_record)
         except IntegrityError:
             raise ConflictError(
                 message="User Creation Failed",

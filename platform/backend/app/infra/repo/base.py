@@ -31,12 +31,15 @@ def exception_logger(f):
 
 
 class BaseRepository(ABC):
-    @exception_logger
-    async def add_and_commit(self, db_session: AsyncSession, obj):
-        db_session.add(obj)
-        await db_session.commit()
+    def __init__(self, db: AsyncSession):
+        self.db = db
 
     @exception_logger
-    async def add_and_flush(self, db_session: AsyncSession, obj):
-        db_session.add(obj)
-        await db_session.flush()
+    async def add_and_commit(self, obj):
+        self.db.add(obj)
+        await self.db.commit()
+
+    @exception_logger
+    async def add_and_flush(self, obj):
+        self.db.add(obj)
+        await self.db.flush()

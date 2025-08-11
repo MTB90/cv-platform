@@ -15,8 +15,8 @@ logger = logging.getLogger(__name__)
 
 
 class DocRepository(BaseRepository):
-    async def get_by_id(self, db_session, doc_id: UUID) -> Optional[Doc]:
-        result = await db_session.execute(select(DocModel).where(DocModel.id == doc_id))
+    async def get_by_id(self, doc_id: UUID) -> Optional[Doc]:
+        result = await self.db.execute(select(DocModel).where(DocModel.id == doc_id))
         doc_record = result.scalar_one_or_none()
 
         if doc_record is None:
@@ -24,11 +24,11 @@ class DocRepository(BaseRepository):
 
         return DocMapper.to_domain(doc_record)
 
-    async def create(self, db_session, doc: Doc) -> Doc:
+    async def create(self, doc: Doc) -> Doc:
         doc_record = DocMapper.from_domain(doc)
 
         try:
-            await self.add_and_commit(db_session, doc_record)
+            await self.add_and_commit(doc_record)
         except IntegrityError:
             raise ConflictError("Doc Creation Failed")
 

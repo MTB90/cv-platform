@@ -6,6 +6,9 @@ secretGenerator:
     literals:
       - MINIO_ROOT_USER=minioAccessKey
       - MINIO_ROOT_PASSWORD=minioSecretKey
+      - MINIO_NOTIFY_WEBHOOK_ENABLE_DOC_STATUS=on
+      - MINIO_NOTIFY_WEBHOOK_ENDPOINT_DOC_STATUS=http://backend/api/private/webhooks/docs/status
+
 
 resources:
   - ../../base

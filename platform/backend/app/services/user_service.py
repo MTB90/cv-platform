@@ -1,8 +1,6 @@
-import datetime
 import logging
+from datetime import datetime, timezone
 from uuid import UUID, uuid4
-
-from sqlmodel.ext.asyncio.session import AsyncSession
 
 from core.exceptions import UserNotFoundError
 from domain.user import User
@@ -13,8 +11,7 @@ logger = logging.getLogger(__name__)
 
 
 class UserService:
-    def __init__(self, db_session: AsyncSession, user_repo: UserRepository):
-        self._db_session = db_session
+    def __init__(self, user_repo: UserRepository):
         self._user_repo = user_repo
 
     async def create_user(self, data: UserCreate) -> UserResponse:
@@ -23,22 +20,22 @@ class UserService:
             id=uuid4(),
             name=data.name,
             email=data.email,
-            created_at=datetime.datetime.now(datetime.UTC),
+            created_at=datetime.now(timezone.utc),
         )
-        user = await self._user_repo.create(self._db_session, user_create)
+        user = await self._user_repo.create(user_create)
 
         logger.info("user created", extra={"user_name": data.name})
         return UserResponse(**user.__dict__)
 
     async def list_all_users(self):
         logger.info("list all users")
-        users = await self._user_repo.get_all(self._db_session)
+        users = await self._user_repo.get_all()
         return [UserResponse(**user.__dict__) for user in users]
 
     async def get_user_by_id(self, user_id: UUID):
         logger.info("get user", extra={"user_id": user_id})
 
-        user = await self._user_repo.get_by_id(self._db_session, user_id)
+        user = await self._user_repo.get_by_id(user_id)
         if user is None:
             raise UserNotFoundError(user_id)
 

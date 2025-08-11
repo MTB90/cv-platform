@@ -6,7 +6,6 @@ import pytest
 from core.exceptions import NotFoundError
 from schema.job import JobCreate, JobType
 from services.job_service import JobService
-from tests.conftest import patch_async_cls
 
 
 @pytest.mark.anyio
