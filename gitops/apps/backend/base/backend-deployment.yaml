@@ -32,7 +32,7 @@ spec:
         imagePullPolicy: IfNotPresent
         livenessProbe:
           httpGet:
-            path: /healthz/
+            path: /healthz
             port: 8000
           initialDelaySeconds: 5
           periodSeconds: 3
