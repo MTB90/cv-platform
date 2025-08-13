@@ -13,25 +13,28 @@ class DocCreate(BaseModel):
     format: DocFormat
 
 
-class DocResponse(BaseModel):
-    id: UUID
-    name: constr(max_length=255)
-    type: DocType
-    format: DocFormat
-    status: DocStatus
+class DocPresignedUrl(BaseModel):
     presigned_url: HttpUrl
 
 
-class DocEventStatus(BaseModel):
+class DocResponse(BaseModel):
+    id: UUID
+    name: str
+    type: DocType
+    format: DocFormat
+    status: DocStatus
+
+
+class DocEvent(BaseModel):
     user_id: UUID
     doc_id: UUID
 
     key: str = Field(alias="Key")
-    event_name: str = Field(alias="EventName")
+    status: str = Field(alias="EventName")
 
-    @field_validator("event_name", mode="after")
+    @field_validator("status", mode="after")
     @classmethod
-    def validate_event(cls, value: str) -> str:
+    def validate_status(cls, value: str) -> str:
         if value in ["s3:ObjectCreated:Post", "s3:ObjectCreated:Put"]:
             return DocStatus.READY
 

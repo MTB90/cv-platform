@@ -15,11 +15,11 @@ async def list_users(service: UserServiceDep):
     return await service.list_all_users()
 
 
-@router.post("/", response_model=UserResponse, status_code=status.HTTP_201_CREATED)
-async def create_user(data: UserCreate, service: UserServiceDep):
-    return await service.create_user(data)
-
-
 @router.get("/{user_id}", response_model=UserResponse)
 async def get_user(user_id: UUID, service: UserServiceDep):
     return await service.get_user_by_id(user_id)
+
+
+@router.post("/", response_model=UserResponse, status_code=status.HTTP_201_CREATED)
+async def create_user(data: UserCreate, service: UserServiceDep):
+    return await service.create_user(data)

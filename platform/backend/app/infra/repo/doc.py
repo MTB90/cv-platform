@@ -1,6 +1,6 @@
 import logging
 from datetime import datetime
-from typing import Optional
+from typing import Optional, Sequence
 from uuid import UUID
 
 from sqlalchemy import select
@@ -16,6 +16,12 @@ logger = logging.getLogger(__name__)
 
 
 class DocRepository(BaseRepository):
+    async def get_all(self) -> Sequence[Doc]:
+        result = await self.db.execute(select(DocModel))
+        doc_records = result.scalars().all()
+
+        return [DocMapper.to_domain(doc_record) for doc_record in doc_records]
+
     async def get_by_id(self, doc_id: UUID) -> Optional[Doc]:
         result = await self.db.execute(select(DocModel).where(DocModel.id == doc_id))
         doc_record = result.scalar_one_or_none()
@@ -46,5 +52,6 @@ class DocRepository(BaseRepository):
 
         try:
             await self.add_and_commit(doc_record)
+            return DocMapper.to_domain(doc_record)
         except IntegrityError:
             raise ConflictError("Doc Update Failed")

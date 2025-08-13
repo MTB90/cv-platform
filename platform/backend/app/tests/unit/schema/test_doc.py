@@ -2,7 +2,7 @@ from uuid import UUID
 
 import pytest
 
-from app.schema.doc import DocStatus, DocEventStatus
+from app.schema.doc import DocStatus, DocEvent
 
 
 @pytest.mark.parametrize(
@@ -32,7 +32,7 @@ from app.schema.doc import DocStatus, DocEventStatus
 )
 def test_doc_update_status_when_correct_values_no_exception(event, key, expected):
     try:
-        DocEventStatus.model_validate({"EventName": event, "Key": key})
+        DocEvent.model_validate({"EventName": event, "Key": key})
     except Exception as exc:
         pytest.fail(f"Unexpected exception: {exc}")
 
@@ -65,4 +65,4 @@ def test_doc_update_status_when_correct_values_no_exception(event, key, expected
 )
 def test_doc_update_status_when_invalid_values_raise_value_error(event, key):
     with pytest.raises(ValueError):
-        DocEventStatus.model_validate({"EventName": event, "Key": key})
+        DocEvent.model_validate({"EventName": event, "Key": key})

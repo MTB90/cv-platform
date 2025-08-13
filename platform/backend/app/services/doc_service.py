@@ -6,7 +6,7 @@ from core.exceptions import UserNotFoundError, DocNotFoundError
 from domain.doc import Doc, DocStatus
 from infra.repo.doc import DocRepository
 from infra.repo.user import UserRepository
-from schema.doc import DocCreate, DocEventStatus, DocResponse
+from schema.doc import DocCreate, DocEvent, DocPresignedUrl, DocResponse
 from utils.storage import StorageClient
 
 logger = logging.getLogger(__name__)
@@ -18,7 +18,12 @@ class DocService:
         self._user_repo = user_repo
         self._doc_repo = doc_repo
 
-    async def create(self, user_id: UUID, data: DocCreate) -> DocResponse:
+    async def list_docs(self, user_id: UUID):
+        logger.info(f"list docs for user: {user_id}")
+        docs = await self._doc_repo.get_all()
+        return [DocResponse(**doc.__dict__) for doc in docs]
+
+    async def create_doc(self, user_id: UUID, data: DocCreate) -> DocPresignedUrl:
         logger.info("creating doc", extra={"user_id": user_id, "data": data})
 
         user = await self._user_repo.get_by_id(user_id)
@@ -45,9 +50,9 @@ class DocService:
         doc = await self._doc_repo.create(doc_create)
         logger.info("doc created", extra={"doc": doc})
 
-        return DocResponse(**doc.__dict__, presigned_url=presigned_url)
+        return DocPresignedUrl(presigned_url=presigned_url)
 
-    async def update_status(self, data: DocEventStatus):
+    async def update_doc_status(self, data: DocEvent):
         logger.info("updating doc status", extra={"data": data})
 
         user = await self._user_repo.get_by_id(data.user_id)
@@ -55,7 +60,7 @@ class DocService:
             raise UserNotFoundError(data.user_id)
 
         updated_at = datetime.datetime.now(datetime.UTC)
-        doc = await self._doc_repo.update_status(data.doc_id, data.event_name, updated_at)
+        doc = await self._doc_repo.update_status(data.doc_id, DocStatus(data.status), updated_at)
         if doc is None:
             raise DocNotFoundError(data.doc_id)
 

@@ -14,19 +14,6 @@ class UserService:
     def __init__(self, user_repo: UserRepository):
         self._user_repo = user_repo
 
-    async def create_user(self, data: UserCreate) -> UserResponse:
-        logger.info("creating new user", extra={"user_name": data.name})
-        user_create = User(
-            id=uuid4(),
-            name=data.name,
-            email=data.email,
-            created_at=datetime.now(timezone.utc),
-        )
-        user = await self._user_repo.create(user_create)
-
-        logger.info("user created", extra={"user_name": data.name})
-        return UserResponse(**user.__dict__)
-
     async def list_all_users(self):
         logger.info("list all users")
         users = await self._user_repo.get_all()
@@ -39,4 +26,17 @@ class UserService:
         if user is None:
             raise UserNotFoundError(user_id)
 
+        return UserResponse(**user.__dict__)
+
+    async def create_user(self, data: UserCreate) -> UserResponse:
+        logger.info("creating new user", extra={"user_name": data.name})
+        user_create = User(
+            id=uuid4(),
+            name=data.name,
+            email=data.email,
+            created_at=datetime.now(timezone.utc),
+        )
+        user = await self._user_repo.create(user_create)
+
+        logger.info("user created", extra={"user_name": data.name})
         return UserResponse(**user.__dict__)
