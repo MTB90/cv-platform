@@ -5,6 +5,7 @@
 ---
 
 ## 🚀 Project Goals
+
 - Write backend with FastAPI using async
 - Experiment with AI agents and LLM orchestration
 
@@ -17,6 +18,8 @@
     - PyTest
     - Pydantic
 - Postgresql
+
+---
 
 ## 📁 Project Structure
 
@@ -40,10 +43,14 @@
 ---
 
 ## ✅ Project TODOs
+
 ### `pipeline`
+
 - [ ] push backend docker image to dockerhub
+- [ ] update docker images in repository cv-platform-infra
 
 ### `platform/backend`
+
 - [x] Base template for backend service (FastAPI)
 - [x] Multi-stage Dockerfile for optimized builds
 - [x] Define base models and write simple migrations
@@ -60,6 +67,7 @@
 - [ ] Add user-level limits (jobs/request caps)
 
 ### `platform/agentai`
+
 - [ ] Select framework for agents (e.g., LangChain, CrewAI)
 - [ ] Ensure uploaded document content cannot alter agent behavior (prompt injection protection)
 
