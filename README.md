@@ -46,7 +46,7 @@
 
 ### `pipeline`
 
-- [ ] push backend docker image to dockerhub
+- [x] push backend docker image to dockerhub
 - [ ] update docker images in repository cv-platform-infra
 
 ### `platform/backend`

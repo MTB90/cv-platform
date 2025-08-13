@@ -13,42 +13,49 @@ jobs:
         with:
           python-version: '3.12'
 
-      - name: install-requirements
+      - name: Install Requirements
         working-directory: platform/backend
         run: |
           make pip-install
           make pip-install-test
 
-      - name: code-test
+      - name: Code Test
         working-directory: platform/backend
         run: make code-test
 
-      - name: unit-test
+      - name: Unit Test
         working-directory: platform/backend
         run: make unit-test
 
-  platform-tag:
-    permissions: write-all
+  platform-gen-tag:
     runs-on: ubuntu-latest
+    outputs:
+      tag: ${{ steps.tag.outputs.new_tag }}
     steps:
       - uses: actions/checkout@v4
-      - name: Generate tag version
+      - name: Generate Tag
+        id: tag
         uses: anothrNick/github-tag-action@v1
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          TAG_PREFIX: v
+          DEFAULT_BUMP: patch
+          DRY_RUN: true
 
-  platform-push:
-    needs: [ platform-tag, platform-tests ]
+  platform-push-images:
+    needs: [ platform-gen-tag,platform-tests ]
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-
       - name: Docker meta
+        env:
+          TAG: ${{needs.platform-gen-tag.outputs.tag}}
         id: meta
         uses: docker/metadata-action@v5
         with:
           images: mtb90/cv-platform-backend
+          tags: |
+            type=raw,value=latest,enable={{is_default_branch}}
+            type=raw,value=${{env.TAG}}
 
       - name: Login to Docker Hub
         uses: docker/login-action@v3
@@ -63,3 +70,19 @@ jobs:
           push: true
           tags: ${{ steps.meta.outputs.tags }}
           labels: ${{ steps.meta.outputs.labels }}
+
+  platform-push-tag:
+    needs: [ platform-gen-tag, platform-push-images ]
+    permissions: write-all
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Create Tag
+        env:
+          TAG: ${{needs.platform-gen-tag.outputs.tag}}
+        uses: rickstaa/action-create-tag@v1
+        with:
+          tag: ${{env.TAG}}
