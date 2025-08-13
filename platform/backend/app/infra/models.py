@@ -9,11 +9,22 @@ from domain.job import JobStatus
 from schema.doc import DocStatus
 
 
+class UserModel(SQLModel, table=True):
+    __tablename__ = "users"
+
+    id: UUID = Field(default_factory=uuid4, nullable=False, primary_key=True)
+    name: str = Field(sa_column=Column(String(255), nullable=False))
+    email: str = Field(sa_column=Column(String(255), nullable=False, unique=True))
+    created_at: datetime = Field(
+        sa_column=Column(DateTime(timezone=True), server_default=func.now(), nullable=False),
+    )
+
+
 class DocModel(SQLModel, table=True):
     __tablename__ = "docs"
 
     id: Optional[UUID] = Field(default_factory=uuid4, primary_key=True)
-    user_id: UUID = Field(default=None, nullable=False, foreign_key="users.id")
+    user_id: UUID = Field(default=None, nullable=False, foreign_key="users.id", index=True)
     name: str = Field(sa_column=Column(String(255), nullable=False))
     type: str = Field(sa_column=Column(String(50), nullable=False))
     format: str = Field(sa_column=Column(String(50), nullable=False))
@@ -29,21 +40,11 @@ class DocModel(SQLModel, table=True):
     )
 
 
-class UserModel(SQLModel, table=True):
-    __tablename__ = "users"
-
-    id: UUID = Field(default_factory=uuid4, nullable=False, primary_key=True)
-    name: str = Field(sa_column=Column(String(255), nullable=False))
-    email: str = Field(sa_column=Column(String(255), nullable=False, unique=True))
-    created_at: datetime = Field(
-        sa_column=Column(DateTime(timezone=True), server_default=func.now(), nullable=False),
-    )
-
-
 class JobModel(SQLModel, table=True):
     __tablename__ = "jobs"
 
     id: UUID = Field(default_factory=uuid4, nullable=False, primary_key=True)
+    user_id: UUID = Field(default=None, nullable=False, foreign_key="users.id", index=True)
     type: str = Field(sa_column=Column(String(50), nullable=False))
     status: str = Field(
         sa_column=Column(String(50), nullable=False, default=JobStatus.PENDING.value)

@@ -20,7 +20,7 @@ class DocService:
 
     async def list_docs(self, user_id: UUID):
         logger.info(f"list docs for user: {user_id}")
-        docs = await self._doc_repo.get_all()
+        docs = await self._doc_repo.get_all(user_id)
         return [DocResponse(**doc.__dict__) for doc in docs]
 
     async def create_doc(self, user_id: UUID, data: DocCreate) -> DocPresignedUrl:

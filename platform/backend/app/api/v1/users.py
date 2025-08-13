@@ -12,7 +12,7 @@ router = APIRouter(prefix="/users", tags=["users"])
 
 @router.get("/", response_model=List[UserResponse])
 async def list_users(service: UserServiceDep):
-    return await service.list_all_users()
+    return await service.list_users()
 
 
 @router.get("/{user_id}", response_model=UserResponse)

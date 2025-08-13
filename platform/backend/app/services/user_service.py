@@ -14,7 +14,7 @@ class UserService:
     def __init__(self, user_repo: UserRepository):
         self._user_repo = user_repo
 
-    async def list_all_users(self):
+    async def list_users(self):
         logger.info("list all users")
         users = await self._user_repo.get_all()
         return [UserResponse(**user.__dict__) for user in users]

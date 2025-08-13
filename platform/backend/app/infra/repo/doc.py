@@ -16,8 +16,8 @@ logger = logging.getLogger(__name__)
 
 
 class DocRepository(BaseRepository):
-    async def get_all(self) -> Sequence[Doc]:
-        result = await self.db.execute(select(DocModel))
+    async def get_all(self, user_id: UUID) -> Sequence[Doc]:
+        result = await self.db.execute(select(DocModel).where(DocModel.user_id == user_id))
         doc_records = result.scalars().all()
 
         return [DocMapper.to_domain(doc_record) for doc_record in doc_records]

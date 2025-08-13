@@ -24,8 +24,10 @@
 - [ ] add soft delete for docs
 - [ ] how limit uploaded file up to 20MB
 - [ ] notify about file is uploaded
+- [ ] pagination
 - [ ] configure settings (cors, database)
 - [ ] general limits per user, requests/jobs total capacity etc.
 
 ### platform/agentai:
 - [ ] restrict access for workers
+- [ ] make sure that in document will not change behavior of agent (command in uploaded doc)

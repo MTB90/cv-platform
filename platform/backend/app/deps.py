@@ -5,8 +5,10 @@ from sqlmodel.ext.asyncio.session import AsyncSession
 
 from core.config import get_settings
 from infra.repo.doc import DocRepository
+from infra.repo.job import JobRepository
 from infra.repo.user import UserRepository
 from services.doc_service import DocService
+from services.job_service import JobService
 from services.user_service import UserService
 from utils.database import DB
 from utils.storage import StorageClient
@@ -39,5 +41,14 @@ async def get_doc_service(db: DatabaseDep) -> DocService:
     return DocService(storage, user_repo, doc_repo)
 
 
+async def get_job_service(db: DatabaseDep) -> JobService:
+    user_repo = UserRepository(db)
+    doc_repo = DocRepository(db)
+    job_repo = JobRepository(db)
+
+    return JobService(user_repo, doc_repo, job_repo)
+
+
 UserServiceDep = Annotated[UserService, Depends(get_user_service)]
 DocServiceDep = Annotated[DocService, Depends(get_doc_service)]
+JobServiceDep = Annotated[JobService, Depends(get_job_service)]

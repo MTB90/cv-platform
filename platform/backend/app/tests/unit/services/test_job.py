@@ -20,9 +20,9 @@ async def test_create_job_when_no_user_raise_404():
     mock_user_repo = AsyncMock()
     mock_user_repo.get_by_id.return_value = None
 
-    service = JobService(AsyncMock(), mock_user_repo, AsyncMock(), AsyncMock())
+    service = JobService(mock_user_repo, AsyncMock(), AsyncMock())
     with pytest.raises(NotFoundError):
-        await service.create(mock_user_id, job_create)
+        await service.create_job(mock_user_id, job_create)
 
 
 @pytest.mark.anyio
@@ -38,8 +38,8 @@ async def test_create_job_when_no_source_doc_raise_404():
     mock_doc_repo.get_by_id.return_value = None
 
     with pytest.raises(NotFoundError):
-        service = JobService(AsyncMock(), AsyncMock(), mock_doc_repo, AsyncMock())
-        await service.create(mock_user_id, job_create)
+        service = JobService(AsyncMock(), mock_doc_repo, AsyncMock())
+        await service.create_job(mock_user_id, job_create)
 
 
 @pytest.mark.anyio
@@ -54,7 +54,7 @@ async def test_create_job_when_doc_found_execute_workflow():
     mock_doc_repo = AsyncMock()
     mock_job_repo = AsyncMock()
 
-    service = JobService(AsyncMock(), AsyncMock(), mock_doc_repo, mock_job_repo)
-    await service.create(mock_user_id, job_create)
+    service = JobService(AsyncMock(), mock_doc_repo, mock_job_repo)
+    await service.create_job(mock_user_id, job_create)
 
     mock_doc_repo.create.assert_called()
