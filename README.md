@@ -1,50 +1,67 @@
 # 🧠 cv-platform
 
-**cv-platform** is a hands-on project focused on exploring modern AI agent and DevOps/GitOps practices. It integrates cutting-edge tools for platform engineering, automation, and experimentation.
+**cv-platform** is a hands-on project focused on exploring modern AI agent.
 
 ---
 
 ## 🚀 Project Goals
-
-- Learn and apply DevOps and GitOps methodologies  
-- Experiment with AI agents and LLM orchestration  
-
+- Write backend with FastAPI using async
+- Experiment with AI agents and LLM orchestration
 
 ---
 
 ## 🛠️ Tech Stack Overview
 
-### 🔧 DevOps / GitOps
+- Python 3.12
+    - FastAPI
+    - PyTest
+    - Pydantic
+- Postgresql
 
-- **Minikube** — Local Kubernetes cluster  
-  [https://minikube.sigs.k8s.io/docs](https://minikube.sigs.k8s.io/docs)
-- **ArgoCD** — Declarative GitOps continuous delivery  
-  [https://argo-cd.readthedocs.io/en/stable](https://argo-cd.readthedocs.io/en/stable)
+## 📁 Project Structure
 
-### 🤖 AI Agents
+```
+├── Makefile
+├── README.md
+├── docs
+└── platform
+    ├── service-1
+        ├── Dockerfile
+        ├── ...
+        └── requirements.txt
+    ├── ...
+    └── service-n
+```
 
-- **CrewAI** — Framework for building multi-agent systems  
-  [https://github.com/crewAIInc/crewAI](https://github.com/crewAIInc/crewAI)
-
-### 🧩 Other Tools
-
-- **Ollama** — Run large language models locally  
-  [https://github.com/ollama/ollama](https://github.com/ollama/ollama)
-
----
-
-## 📚 Documentation
-
-Navigate the documentation to understand the platform architecture, setup, and components:
-
-- [📌 Project Overview](docs/project_overview.md)
-- [📁 Project Structure](docs/project_structure.md)
-- [🏗️ Architecture](docs/project_architecture.md)
-- [🧱 Tech Stack](docs/project_stack.md)
-- [💻 Deployment](docs/deployment.md)
-- [🚀 TODO](docs/project_todo.md)
+- `README.md` - Main README for the whole project.
+- `docs` - Docs about project.
+- `platform` - It contains all source code for services.
 
 ---
+
+## ✅ Project TODOs
+### `pipeline`
+- [ ] push backend docker image to dockerhub
+
+### `platform/backend`
+- [x] Base template for backend service (FastAPI)
+- [x] Multi-stage Dockerfile for optimized builds
+- [x] Define base models and write simple migrations
+- [x] Basic APIs for users and document handling
+- [x] Upload file using pre-signed URL
+- [x] Add structured logging
+- [x] Add health check for backend pod
+- [ ] Introduce endpoints and logic for job management
+- [ ] Add soft delete for documents
+- [ ] Enforce file upload limit (max 20MB)
+- [ ] Notify user when file is uploaded
+- [ ] Implement pagination
+- [ ] Configure settings (CORS, database)
+- [ ] Add user-level limits (jobs/request caps)
+
+### `platform/agentai`
+- [ ] Select framework for agents (e.g., LangChain, CrewAI)
+- [ ] Ensure uploaded document content cannot alter agent behavior (prompt injection protection)
 
 ## 📍 Status
 
