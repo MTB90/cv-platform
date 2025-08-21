@@ -41,3 +41,13 @@ class StorageClient:
         except Exception as e:
             logger.error("can't create presigned url for upload", exc_info=e)
             raise ServiceUnavailableError()
+
+    async def close(self):
+        if not self._client:
+            logger.warning("can't close storage session, session not exist")
+            return
+
+        try:
+            await self._client.close_session()
+        except Exception as e:
+            logger.error("can't close storage session", exc_info=e)

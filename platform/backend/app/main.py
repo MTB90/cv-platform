@@ -1,5 +1,7 @@
 import logging
 import uuid
+from contextlib import asynccontextmanager
+from typing import AsyncGenerator
 
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
@@ -11,14 +13,33 @@ from core.config import get_settings
 from core.context import context_request_id
 from core.exceptions import AppException
 from core.logging import setup_logging
+from utils.database import DB
+from utils.storage import StorageClient
 
 settings = get_settings()
 setup_logging(settings.LOG_LEVEL)
 logger = logging.getLogger(__name__)
 
 
+@asynccontextmanager
+async def lifespan_app(app: FastAPI) -> AsyncGenerator[None, None]:
+    logger.info("initialize app ...")
+
+    logger.info("initialize database ...")
+    app.state.database = DB(settings)
+
+    logger.info("initialize storage ...")
+    app.state.storage = StorageClient(settings)
+
+    logger.info("app initialized")
+    yield
+
+    await app.state.database.close()
+    await app.state.database.close()
+
+
 def build_app() -> FastAPI:
-    application = FastAPI()
+    application = FastAPI(lifespan=lifespan_app)
     application.add_middleware(
         CORSMiddleware,
         allow_origins=["*"],

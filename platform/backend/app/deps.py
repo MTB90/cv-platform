@@ -1,9 +1,9 @@
-from typing import AsyncGenerator, Annotated
+from typing import AsyncGenerator, Annotated, cast
 
 from fastapi import Depends
+from fastapi import Request
 from sqlmodel.ext.asyncio.session import AsyncSession
 
-from core.config import get_settings
 from infra.repo.doc import DocRepository
 from infra.repo.job import JobRepository
 from infra.repo.user import UserRepository
@@ -13,18 +13,25 @@ from services.user_service import UserService
 from utils.database import DB
 from utils.storage import StorageClient
 
-settings = get_settings()
-storage = StorageClient(settings)
-database = DB(settings)
+
+class AppState:
+    database: DB
+    storage: StorageClient
 
 
-async def get_db() -> AsyncGenerator[AsyncSession, None]:
+def get_app_state(request: Request) -> AppState:
+    return cast(AppState, request.app.state)
+
+
+AppStateDep = Annotated[AppState, Depends(get_app_state)]
+
+
+async def get_db(app_state: AppStateDep) -> AsyncGenerator[AsyncSession, None]:
     # Create new database session
-    async with database.async_session() as session:
+    async with app_state.database.async_session() as session:
         yield session
 
 
-# Utils dependencies
 DatabaseDep = Annotated[AsyncSession, Depends(get_db)]
 
 
@@ -34,18 +41,16 @@ async def get_user_service(db: DatabaseDep) -> UserService:
     return UserService(user_repo)
 
 
-async def get_doc_service(db: DatabaseDep) -> DocService:
+async def get_doc_service(app_state: AppStateDep, db: DatabaseDep) -> DocService:
     user_repo = UserRepository(db)
     doc_repo = DocRepository(db)
-
-    return DocService(storage, user_repo, doc_repo)
+    return DocService(app_state.storage, user_repo, doc_repo)
 
 
 async def get_job_service(db: DatabaseDep) -> JobService:
     user_repo = UserRepository(db)
     doc_repo = DocRepository(db)
     job_repo = JobRepository(db)
-
     return JobService(user_repo, doc_repo, job_repo)
 
 
